@@ -1,0 +1,8 @@
+	===== Castle-Combat README =====
+
+=== Linux ===
+
+Requirements: pygame, twisted.
+Installation: No support for installation, yet.
+Running Castle-Combat: just run ./castle-combat
+
