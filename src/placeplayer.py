@@ -1,6 +1,6 @@
 import pygame
 from pygame.locals import *
-from Numeric import *
+from numpy.oldnumeric import *
 
 import common
 from game import game
@@ -37,7 +37,7 @@ class PlacePlayer(BasePlayer):
 		common.blit(Cannon.cannon_pic[self.selected_type][0], (self.pos[0]*common.block_size, self.pos[1]*common.block_size) )
 
 		for offset in common.coords( (2 + self.selected_type, )*2):
-			pos = add(self.pos, offset)
+			pos = tuple(add(self.pos, offset))
 			if game.field.array[pos] != Field.EMPTY or self.player.secured[pos] == 0:
 				common.blit(self.cantbuild_pic, multiply(pos, common.block_size))
 
