@@ -1,6 +1,6 @@
 import pygame
 from pygame.locals import *
-from Numeric import *
+from numpy.oldnumeric import *
 import common
 import random
 from copy import copy
@@ -98,7 +98,7 @@ class BuildPlayer(BasePlayer):
 
 	def move(self, vector):
 		old_pos = self.pos
-		self.pos = add(self.pos, vector)
+		self.pos = tuple(add(self.pos, vector))
 		if self.pos != self.bounded_pos():
 			self.pos = old_pos
 			raise common.ActionNotPossible
@@ -114,7 +114,7 @@ class BuildPlayer(BasePlayer):
 					if self.block[i][-side]:
 						margin[1][side] = 0
 
-		return [common.bound(self.pos[dim], 1-margin[dim][0], common.field_size[dim] - 2 + margin[dim][1]) for dim in (0,1)]
+		return tuple(common.bound(self.pos[dim], 1-margin[dim][0], common.field_size[dim] - 2 + margin[dim][1]) for dim in (0,1))
 	
 	def rotate_block(self):
 		if not self.block:

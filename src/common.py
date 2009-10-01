@@ -1,6 +1,8 @@
+## Automatically adapted for numpy.oldnumeric Sep 27, 2009 by 
+
 import pygame
 from pygame.locals import *
-from Numeric import *
+from numpy.oldnumeric import *
 import os
 
 debug = True
@@ -213,7 +215,7 @@ def info(string):
 
 def coords(stop):
 	i = indices(stop)
-	return zip(i[0].flat, i[1].flat)
+	return zip(i[0].ravel(), i[1].ravel())
 
 def bound(var, lower, upper):
 	return max( min(var, upper), lower)
