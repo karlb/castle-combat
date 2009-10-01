@@ -1,5 +1,5 @@
 from random import randint
-from Numeric import *
+from numpy.oldnumeric import *
 from twisted.spread import pb
 
 import common
@@ -170,7 +170,7 @@ class GruntAssault(Map):
 	def add_grunts(self, amount):
 		player = game.players[0]
 		while amount > 0:
-			pos = [randint(0, max-1) for max in common.field_size]
+			pos = tuple(randint(0, max-1) for max in common.field_size)
 			if game.field[pos] == Field.EMPTY and not player.secured[pos]:
 				Grunt(pos)
 				amount -= 1
@@ -258,7 +258,7 @@ class ConquerMap(Map):
 					return True
 
 			while True:
-				pos = [randint(0,common.field_size[i]) for i in (0,1)]
+				pos = tuple(randint(0,common.field_size[i]) for i in (0,1))
 				if is_place_suitable(pos):
 					self.castles += [ Castle(pos=pos, player=None, map=self), ]
 					return
