@@ -39,7 +39,7 @@ class NewGameState(WidgetState):
 		else:
 			Button("Start Game", (None, 250), lambda: start_game(self.total_players.value, self.local_players.value, 0))
 			
-		self.map = SpinBox('Map', (300, 360), ('dummy',))
+		self.map = SpinBox('Map', (470, 360), ('dummy',))
 
 		on_total_change()
 
@@ -108,8 +108,8 @@ class ConfigState(WidgetState):
 			else:
 				sound.sound_off()
 		bool_to_on_off = {True:'On', False:'Off'}
-		self.sound = SpinBox("Sound", (350, -20), ("On", "Off"), default=bool_to_on_off[conf.sound], on_change=sound_change)
-		self.fullscreen = SpinBox("Fullscreen", (500, -20), ("On", "Off"), default=bool_to_on_off[conf.fullscreen])
+		self.sound = SpinBox("Sound", (265, -20), ("On", "Off"), default=bool_to_on_off[conf.sound], on_change=sound_change)
+		self.fullscreen = SpinBox("Fullscreen", (485, -20), ("On", "Off"), default=bool_to_on_off[conf.fullscreen])
 
 	def quit(self):
 		for i in (0,1):
