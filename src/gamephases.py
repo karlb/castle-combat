@@ -126,13 +126,13 @@ class AnnouncePhase(State):
 		continue_pic = common.small_font.render(continue_string, True, (0,0,0))
 		self.announce_surface.blit(
 				title_pic,
-				((self.announce_surface.get_width() - title_pic.get_width()) / 2, 15)
+				((self.announce_surface.get_width() - title_pic.get_width()) / 2, 30)
 		)
-		self.announce_surface.blit(instructions_pic, (30, 65))
-		self.announce_surface.blit(buttons_pic, (30, 90))
+		self.announce_surface.blit(instructions_pic, (25, 90))
+		self.announce_surface.blit(buttons_pic, (25, 115))
 		self.announce_surface.blit(
 				continue_pic,
-				((self.announce_surface.get_width() - continue_pic.get_width()) / 2, 160)
+				((self.announce_surface.get_width() - continue_pic.get_width()) / 2, 170)
 		)
 	
 class BuildPhase(Phase):
