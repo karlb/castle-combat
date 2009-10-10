@@ -198,9 +198,9 @@ def init():
 	screen = pygame.display.set_mode((800, 600), flags)
 	global backbuffer
 	global font
-	font = pygame.font.Font(os.path.join(data_path, 'colourba.ttf'), 34)
+	font = pygame.font.Font(os.path.join(data_path, 'DefaultFancy.ttf'), 34)
 	global small_font
-	small_font = pygame.font.Font(os.path.join(data_path, 'colourba.ttf'), 24)
+	small_font = pygame.font.Font(os.path.join(data_path, 'DefaultFancy.ttf'), 20.5)
 
 def info(string):
 	from widget import WidgetState
