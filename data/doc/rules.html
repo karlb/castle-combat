@@ -1,92 +1,209 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 	<title>Castle-Combat rules</title>
-	<style type="text/css">
-		p {
+<style type="text/css">
+/*<![CDATA[*/
+		p,
+		li,
+		table.example-pics {
 			margin-left: 2em;
 		}
-		body {
+		#main {
 			max-width: 40em;
 			margin: 0.5em auto 3em auto;
 			padding: 0 1em;
+			text-align: left;
 		}
-	</style>
+		
+		body {
+			background: url('background.png');
+			text-align: center;
+		}
+		h1 {
+			border-bottom: 1px solid black;
+			margin-top: 2em;
+		}
+		table.example-pics td {
+			text-align: center;
+			min-width: 80px;
+		}
+		table.example-pics th {
+			text-align: center;
+			font-weight: normal;
+			vertical-align: top;
+		}
+/*]]>*/
+</style>
 </head>
+
 <body>
-	<h1>Castle-Combat Rules</h1>
-	<h2>Introduction</h2>
-	<p>
-		You have to build castle walls, which allows you to place
-		cannons inside these walls. Your goal is to destroy the enemy's
-		castles by shooting down his castle walls with your cannons.
-		The game is seperated into three phases. You can perform different
-		actions in each of the phases.
-	</p>
+	<p><img src="logo.png" alt="Castle-Combat" /></p>
 
-	<h2>1st Phase: Build</h2>
-	<p>
-		Build walls around as many castles as possible. In order to survive
-		you have to enclose at least one castle. Try to avoid building walls
-		on the houses, or angry grunts will try to damage your wills with
-		their tanks!
-	</p>
-	<p>
-		1st button: Place the current block<br/>
-		2nd button: Turn the block by 90 degree
-	</p>
-	
-	<h2>2nd Phase: Place Cannons</h2>
-	<p>
-		Now you can place cannons equal to the number of castles you
-		have surrounded. Your home castle earns you one extra cannon.
-		Instead of placing three normal cannons you can place one big
-		cannon that causes additional trouble for you enemys.
-	</p>
-	<p>
-	1st button: Place selected cannon<br/>
-	2nd button: Switch between small/big cannon<br/>
-	</p>
-	
-	<h2>3rd Phase: Fight!</h2>
-	<p>
-		It's time to fight! Aim at your opponent's walls with your
-		crosshair and shoot them down. You can also destroy enemy
-		cannons, but they can take a lot of shots before they are
-		destroyed. The number of shots at a certain time is limited
-		to the total of cannons you control (cannons in unenclosed
-		areas don't count towards this total).
-	</p>
-	<p>
-	1st button: Shoot<br/>
-	2nd button: Faster movement<br/>
-	</p>
-	<h1>Appendix</h1>
-	<h2>Credits</h2>
-	<p>
-		Coding and Graphics: <a href="mailto:karlb@gmx.net">Karl Bartel</a> (comments are always welcome)<br/>
-		Music: Crystal Crew<br/>
-		Font: Black Chancery by Doug Miles and Earl Allen (Public Domain)<br/>
-	</p>
-	<h2>Links</h2>
-	<p>
-		Castle-Combat website: <a href="http://www.linux-games.com/castle-combat">http://www.linux-games.com/castle-combat</a><br/>
-	</p>
-	<h2>Networking</h2>
-	<p>
-		Port number: 50386	
-	</p>
-	<h2>License</h2>
-	<p>
-		This program is free software; you can redistribute it and/or
-		modify it under the terms of the GNU General Public License
-		as published by the Free Software Foundation; either version 2
-		of the License, or (at your option) any later version.<br/>
-		<br/>
-		This program is distributed in the hope that it will be useful,
-		but WITHOUT ANY WARRANTY; without even the implied warranty of
-		MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-		GNU General Public License for more details.<br/>
-		<br/>
-		See <a href="http://www.gnu.org/copyleft/gpl.html">this page</a> for more information about the GPL.
-	</p>
+	<div id="main">
+		<h1>Rules</h1>
+
+		<h2>Introduction</h2>
+
+		<p>You have to build castle walls, which allows you to place cannons inside these walls. Your goal is to destroy the enemy's castles by shooting down his castle walls with your cannons. The game is separated into three phases. You can perform different actions in each of the phases.</p>
+
+		<h2>1st Phase: Build</h2>
+
+		<p>Build walls around as many castles as possible. In order to survive you have to enclose at least one castle. Try to avoid building walls on the houses, or angry grunts will try to damage your walls with their tanks!</p>
+
+		<p>1st button: Place the current block<br />
+		2nd button: Turn the block by 90 degree</p>
+
+		<table class="example-pics">
+			<tr>
+				<td><img src="../gfx/castle.png" alt=""/></td>
+
+				<td><img src="../gfx/bigcastle.png" alt="" /></td>
+
+				<td><img src="../gfx/house.png" alt="" /></td>
+
+				<td><img src="../gfx/tank1.png" alt="" /></td>
+			</tr>
+
+			<tr>
+				<th>Castle</th>
+
+				<th>Home Castle</th>
+
+				<th>House</th>
+
+				<th>Grunt</th>
+			</tr>
+		</table>
+
+		<h2>2nd Phase: Place Cannons</h2>
+
+		<p>Now you can place cannons equal to the number of castles you have surrounded. Your home castle earns you one extra cannon. Instead of placing three normal cannons you can place one big cannon that will cause additional trouble for you enemys.</p>
+
+		<p>1st button: Place selected cannon<br />
+		2nd button: Switch between small/big cannon<br /></p>
+
+		<table class="example-pics">
+			<tr>
+				<td><img src="../gfx/cannon0001.png" alt="" /></td>
+
+				<td><img src="../gfx/bigcannon0001.png" alt="" /></td>
+			</tr>
+
+			<tr>
+				<th>Cannon</th>
+
+				<th>Big Cannon</th>
+			</tr>
+		</table>
+
+		<h2>3rd Phase: Fight!</h2>
+
+		<p>It's time to fight! Aim at your opponent's walls with your crosshair and shoot them down. You can also destroy enemy cannons, but they can take a lot of shots before they are destroyed. The number of shots at a certain time is limited to the total of cannons you control (cannons in unenclosed areas don't count towards this total).<br />
+		Beware of the terrible big cannons. Their load will make it impossible to build where their shot hits the ground and the garbage left there will take three rounds to dissolve.</p>
+
+		<p>1st button: Shoot<br />
+		2nd button: Faster movement<br /></p>
+
+		<table class="example-pics">
+			<tr>
+				<td><img src="../gfx/shot.png" alt="" /></td>
+
+				<td><img src="../gfx/garbage-new.png" alt="" /></td>
+
+				<td><img src="../gfx/garbage-med.png" alt="" /></td>
+
+				<td><img src="../gfx/garbage-old.png" alt="" /></td>
+
+				<td><img src="../gfx/destroyed-cannon1.png" alt="" /></td>
+
+				<td><img src="../gfx/destroyed-bigcannon1.png" alt="" /></td>
+			</tr>
+
+			<tr>
+				<th>Cannon Ball</th>
+
+				<th>Garbage<br />
+				(Fresh)</th>
+
+				<th>Garbage<br />
+				(Medium)</th>
+
+				<th>Garbage<br />
+				(Old)</th>
+
+				<th>Cannon<br />
+				(destroyed)</th>
+
+				<th>Big Cannon<br />
+				(destroyed)</th>
+			</tr>
+		</table>
+
+		<h1>Maps</h1>
+
+		<h2>River</h2>
+		<p>
+			The classic map. The different player's territories are separated by river.
+		</p>
+
+		<h2>Conquer</h2>
+		<p>
+			A map without artificial borders between the players. A player can conquer castles and cannons which were formerly controlled by another player. To prevent players from sabotaging enemy wall construction, walls may only be placed in proximity to other friendly walls.
+		</p>
+
+		<h2>Grunt Assault</h2>
+		<p>
+			This single-player map lets you fight against a horde of angry grunts, who are trying hard to destroy the walls around your last castle. The grunts regularly get reinforcements, but the reinforcement strength will decline over time. Your goal is to eliminate all grunts for the map.
+		</p>
+
+		<h1>Appendix</h1>
+
+		<h2>Credits</h2>
+
+		<p>Coding and Graphics: <a href="mailto:karlb@gmx.net">Karl Bartel</a> (comments are always welcome)<br />
+		Music: Crystal Crew<br />
+		Fonts: <a href="http://larabiefonts.com">Larabie Fonts</a> (<a href="../font_read_me.html">font readme</a>)<br /></p>
+
+		<h2>Help Wanted</h2>
+
+		<p>
+			I'm always looking for people interested in improving this game. If you are interested, get in <a href="mailto:karlb@gmx.net">contact</a> with me, and we'll look for a suitable task together. The main areas are:
+		</p>
+
+		<ul>
+			<li>Code (python, a lot of different parts of varying complexity)</li>
+			<li>Graphics</li>
+			<li>Sound/Music (music should be in mod-files or a similar format to keep the file size down)</li>
+			<li>Documentation (as HTML)</li>
+			<li>Packaging for different operating systems</li>
+		</ul>
+		<p>
+			If you don't have much time, there are some small things you can always do:
+		</p>
+		<ul>
+			<li>Submit bug reports when something goes wrong (via email)</li>
+			<li>Provide feedback and tell me which new features are important for you</li>
+			<li>Improve a small part of the documentation, spot typos, etc.</li>
+		</ul>
+
+		<h2>Links</h2>
+
+		<p>Castle-Combat website: <a href="http://www.linux-games.com/castle-combat">http://www.linux-games.com/castle-combat</a><br /></p>
+
+		<h2>Networking</h2>
+
+		<p>Port number: 50386</p>
+
+		<h2>License</h2>
+
+		<p>This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.<br />
+		<br />
+		This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.<br />
+		<br />
+		See <a href="http://www.gnu.org/copyleft/gpl.html">this page</a> for more information about the GPL.</p>
+	</div>
 </body>
-
+</html>
