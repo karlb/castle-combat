@@ -1,4 +1,0 @@
-recursive-include data *.png *.jpg *.ttf *.wav *.xm *.html
-include dist/macosx/*.py dist/macosx/English.lproj
-include TODO README
-
