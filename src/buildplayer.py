@@ -152,9 +152,8 @@ class BuildPlayer(BasePlayer):
 						   (0,1,0),
 					  	   (0,0,0), )
 
-		if game.server:
-			for x in range(turn):
-				self.rotate_block()
+		for x in range(turn):
+			self.local_rotate_block()
 
 		self.pos = self.bounded_pos()
 	
