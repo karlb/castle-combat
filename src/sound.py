@@ -30,6 +30,9 @@ def sound_on():
 	play_music()
 
 def sound_off():
+	if not pygame.mixer.get_init():
+		return
+
 	# effects
 	cannon = DummySound()
 	wall_hit = DummySound()

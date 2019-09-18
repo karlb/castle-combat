@@ -31,6 +31,7 @@ class WidgetState(State):
 class Widget(object):
 	
 	freeze_highlight = None
+	hidden = False
 
 	def __init__(self, pos, text=None, surfaces=None, on_click=None):
 		State.stack[-1].widgets.append(self)
@@ -54,6 +55,8 @@ class Widget(object):
 		self.pos = pos
 		
 	def draw(self):
+		if self.hidden:
+			return
 		# Widget is inactive
 		if self.inactive:
 			if not self.inactive_surface:
@@ -114,6 +117,7 @@ class SpinBox(Widget):
 
 	up = map(lambda col: common.colorize(common.load_image("arrow.png", alpha=True), col), ( (0,0,0), (150,0,0) ))
 	down = map(lambda surf: pygame.transform.flip(surf, False, True), up)
+	_hidden = False
 
 	def __init__(self, label, pos, choices, default=None, on_change=None):
 		self._choices = list(choices)
@@ -123,11 +127,15 @@ class SpinBox(Widget):
 			self.value = default
 		if on_change:
 			self.on_change = on_change
+
 		Widget.__init__(self, pos, text='', on_click=None)
+
+		# add arrows
 		up_pos = (self.pos[0] - SpinBox.up[0].get_width(), self.pos[1])
 		down_pos = (self.pos[0] - SpinBox.up[0].get_width(), self.pos[1] + self.normal_surface.get_height() - SpinBox.down[0].get_height())
 		self.up_widget = Widget( up_pos, surfaces=SpinBox.up, on_click=lambda:self.change(-1))
 		self.down_widget = Widget( down_pos, surfaces=SpinBox.down, on_click=lambda:self.change(1))
+
 		self.update()
 
 	def choices():
@@ -165,6 +173,16 @@ class SpinBox(Widget):
 			return self.choices[self.index]
 		return locals()
 	value = property(**value())
+
+	def hidden():
+		def fset(self, value):
+			self._hidden = value
+			self.up_widget.hidden = value
+			self.down_widget.hidden = value
+		def fget(self):
+			return self._hidden
+		return locals()
+	hidden = property(**hidden())
 
 
 class LineEdit(Widget):

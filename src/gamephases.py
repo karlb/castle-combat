@@ -239,7 +239,7 @@ class BattlePhase(Phase):
 		self.actions = battle_actions
 		self.next_phase = lambda: AnnouncePhase(BuildPhase)
 		remove_garbage()
-		self.announce_surface = common.font.render("Shoot at your enemey's walls!", True, (0,0,0))
+		self.announce_surface = common.font.render("Shoot at your enemy's walls!", True, (0,0,0))
 		Phase.__init__(self)
 		game.field.draw_backbuffer(draw_cannons=False)
 		
