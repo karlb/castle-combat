@@ -33,6 +33,7 @@ def delegate_and_call_observers(cls, to_class, method_names):
 		except common.ActionNotPossible:
 			return
 		for o in self.observers: o.callRemote('METHOD_NAME', *args, **kwargs)
+	local_METHOD_NAME = METHOD_NAME
 	remote_METHOD_NAME = METHOD_NAME
 	"""
 	def delegate_and_call(method_name, self, *args, **kwargs):
@@ -45,6 +46,7 @@ def delegate_and_call_observers(cls, to_class, method_names):
 		return lambda *args, **kwargs: delegate_and_call(method_name, *args, **kwargs)
 		
 	for method_name in method_names:
+		setattr(cls, 'local_' + method_name, getattr(cls, method_name))
 		setattr(cls, method_name, create_method(method_name))
 		setattr(cls, 'remote_' + method_name, getattr(cls, method_name))
 	
@@ -53,6 +55,7 @@ def observe_and_delegate(cls, to_class, method_names):
 
 	This function should be called on a ClientObject class
 	The added code looks like this:
+	local_METHOD_NAME = METHOD_NAME
 	observe_METHOD_NAME = TO_CLASS.METHOD_NAME
 	def METHOD_NAME(self, *args, **kwargs):
 		self.remote_ref.callRemote('METHOD_NAME', *args, **kwargs)
@@ -63,6 +66,7 @@ def observe_and_delegate(cls, to_class, method_names):
 		return lambda *args, **kwargs: call_remote(method_name, *args, **kwargs)
 		
 	for method_name in method_names:
+		setattr(cls, 'local_' + method_name, getattr(cls, method_name))
 		setattr(cls, 'observe_' + method_name, getattr(to_class, method_name))
 		setattr(cls, method_name, create_method(method_name))
 

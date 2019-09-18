@@ -1,6 +1,6 @@
 import pygame
 from pygame.locals import *
-from numpy.oldnumeric import *
+from Numeric import *
 import common
 import random
 from copy import copy
@@ -18,13 +18,12 @@ class BuildPlayer(BasePlayer):
 	def __init__(self, player):
 		BasePlayer.__init__(self)
 		self.player = player
-		self.wait_for_block = 0
-		self.block = None
 
 	def init(self):
 		BasePlayer.init(self)
+		self.wait_for_block = 0
+		self.block = None
 		self.pos = self.player.get_center()
-		self.wait_pic
 
 		self.wait_pic = common.colorize(BuildPlayer.wait_pic, self.player.color)
 		self.select_pic = common.colorize(BuildPlayer.select_pic, self.player.color)
@@ -33,10 +32,10 @@ class BuildPlayer(BasePlayer):
 		self.handle_build_or_place_event(event, (self.put_block, self.rotate_block), self.pos )
 
 	def handle_movement(self, passed_milliseconds):
-		if game.server:
+		if game.server and self.block == None:
 			self.wait_for_block -= passed_milliseconds
-			if self.block == None and self.wait_for_block <= 0:
-				self.generate_block(random.randint(0, 10), random.randint(0, 3))
+			if self.wait_for_block <= 0:
+				self.generate_random_block()
 
 	def is_allowed(self, pos):
 		if not 'build_only_near_walls' in game.field.map.game_options:
@@ -67,7 +66,7 @@ class BuildPlayer(BasePlayer):
 			raise common.NoBlockAvailable
 
 		field = game.field
-		# Can the block be places here?
+		# Can the block be placed here?
 		for x in range(3):
 			for y in range(3):
 				if self.block[x][y]:
@@ -87,6 +86,7 @@ class BuildPlayer(BasePlayer):
 					ypos = y + self.pos[1] - 1
 					if field[xpos][ypos] == Field.HOUSE:
 						field.blit_background((xpos,ypos))
+						#game.server_call('create_grunt', (xpos, ypos))
 						Grunt((xpos, ypos))
 					else:
 						common.backbuffer_blit(self.player.wall_pic, (xpos * common.block_size, ypos * common.block_size) )
@@ -98,7 +98,7 @@ class BuildPlayer(BasePlayer):
 
 	def move(self, vector):
 		old_pos = self.pos
-		self.pos = tuple(add(self.pos, vector))
+		self.pos = add(self.pos, vector)
 		if self.pos != self.bounded_pos():
 			self.pos = old_pos
 			raise common.ActionNotPossible
@@ -114,7 +114,7 @@ class BuildPlayer(BasePlayer):
 					if self.block[i][-side]:
 						margin[1][side] = 0
 
-		return tuple(common.bound(self.pos[dim], 1-margin[dim][0], common.field_size[dim] - 2 + margin[dim][1]) for dim in (0,1))
+		return [common.bound(self.pos[dim], 1-margin[dim][0], common.field_size[dim] - 2 + margin[dim][1]) for dim in (0,1)]
 	
 	def rotate_block(self):
 		if not self.block:
@@ -123,6 +123,9 @@ class BuildPlayer(BasePlayer):
 					   (self.block[0][1], self.block[1][1], self.block[2][1]),
 					   (self.block[0][0], self.block[1][0], self.block[2][0]) )
 		self.pos = self.bounded_pos()
+	
+	def generate_random_block(self):
+		self.generate_block(random.randint(0, 10), random.randint(0, 3))
 	
 	def generate_block(self, piece, turn):
 		if piece in (0,1):
@@ -150,9 +153,9 @@ class BuildPlayer(BasePlayer):
 						   (0,1,0),
 					  	   (0,0,0), )
 
-		if game.server:
-			for x in range(turn):
-				self.rotate_block()
+		#if game.server:
+		for x in range(turn):
+			self.local_rotate_block()
 
 		self.pos = self.bounded_pos()
 	
@@ -166,8 +169,9 @@ class BuildPlayerServer(ServerObject, BuildPlayer):
 
 class BuildPlayerClient(ClientObject, BuildPlayer):
 	def set_state(self, state):
-		#self.__dict__ = state
-		BuildPlayer.__init__(self, state['player'])
+		self.__dict__ = state
+		BasePlayer.__init__(self)
+		#BuildPlayer.__init__(self, state['player'])
 
 networkify(
 	cacheable = BuildPlayerServer,

@@ -1,4 +1,4 @@
-from numpy.oldnumeric import *
+from Numeric import *
 from game import game
 
 class BaseAI:

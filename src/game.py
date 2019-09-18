@@ -1,6 +1,6 @@
 import pygame
 from pygame.locals import *
-from numpy.oldnumeric import *
+from Numeric import *
 from twisted.spread import pb
 
 import common
@@ -112,6 +112,10 @@ class Game(pb.Referenceable, common.Borg):
 			common.backbuffer_blit(Field.obstacle_pic[Field.HOUSE], multiply(pos, common.block_size))
 		else:
 			raise common.ActionNotPossible
+
+	def remote_create_grunt(self, pos):
+		from field import Grunt
+		Grunt(pos)
 	
 	def remote_move_grunt(self, id, new_pos):
 		from field import Grunt

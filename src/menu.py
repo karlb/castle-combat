@@ -18,10 +18,11 @@ class NewGameState(WidgetState):
 		WidgetState.__init__(self)
 
 		def start_game(total_players, local_players, ai_players):
-			from map import maps
-			map = [m for m in maps if m.title == self.map.value and self.total_players.value in m.allowed_players][0]
 			import server
-			ser = server.Server(map, total_players)
+			options = dict(
+					difficulty = self.difficulty.value.lower().replace(' ', '_')
+			)
+			ser = server.Server(self.selected_map(options), total_players)
 			ser.run(local_players, ai_players)
 
 		def on_total_change():
@@ -29,6 +30,15 @@ class NewGameState(WidgetState):
 			self.local_players.choices = range(self.total_players.value, 0, -1)
 			from map import maps
 			self.map.choices = [m.title for m in maps if self.total_players.value in m.allowed_players]
+			on_map_change()
+
+		def on_map_change():
+			from map import maps, GruntAssault
+			self.selected_map = [m for m in maps if m.title == self.map.value and self.total_players.value in m.allowed_players][0]
+			if self.selected_map == GruntAssault:
+				self.difficulty.hidden = False
+			else:
+				self.difficulty.hidden = True
 
 		Button("back", (50, -20), self.quit)
 		self.total_players = SpinBox("Total Players", (50, 360), (4,3,2,1), default=conf.total_players, on_change=on_total_change)
@@ -39,7 +49,8 @@ class NewGameState(WidgetState):
 		else:
 			Button("Start Game", (None, 250), lambda: start_game(self.total_players.value, self.local_players.value, 0))
 			
-		self.map = SpinBox('Map', (470, 360), ('dummy',))
+		self.map = SpinBox('Map', (500, 360), ('dummy',), on_change=on_map_change)
+		self.difficulty = SpinBox('Difficulty', (500, 400), ('Very Easy', 'Easy', 'Medium', 'Hard', 'Very Hard'))
 
 		on_total_change()
 
@@ -65,7 +76,7 @@ class JoinGameState(WidgetState):
 
 		Button("back", (50, -20), self.quit)
 		self.server = LineEdit("Server", (50, 360), conf.server)
-		self.local_players = SpinBox("Local Players", (50, 400), (1,2))
+		self.local_players = SpinBox("Local Players", (50, 400), (2,1))
 		Button("Join Game", (None, 250), lambda: join(self.server.value, self.local_players.value) )
 
 	def init_state_display(self):
@@ -108,8 +119,8 @@ class ConfigState(WidgetState):
 			else:
 				sound.sound_off()
 		bool_to_on_off = {True:'On', False:'Off'}
-		self.sound = SpinBox("Sound", (265, -20), ("On", "Off"), default=bool_to_on_off[conf.sound], on_change=sound_change)
-		self.fullscreen = SpinBox("Fullscreen", (485, -20), ("On", "Off"), default=bool_to_on_off[conf.fullscreen])
+		self.sound = SpinBox("Sound", (350, -20), ("On", "Off"), default=bool_to_on_off[conf.sound], on_change=sound_change)
+		self.fullscreen = SpinBox("Fullscreen", (500, -20), ("On", "Off"), default=bool_to_on_off[conf.fullscreen])
 
 	def quit(self):
 		for i in (0,1):

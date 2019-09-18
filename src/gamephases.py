@@ -1,6 +1,6 @@
 import pygame
 from pygame.locals import *
-from numpy.oldnumeric import *
+from Numeric import *
 
 import common
 from game import game
@@ -126,13 +126,13 @@ class AnnouncePhase(State):
 		continue_pic = common.small_font.render(continue_string, True, (0,0,0))
 		self.announce_surface.blit(
 				title_pic,
-				((self.announce_surface.get_width() - title_pic.get_width()) / 2, 30)
+				((self.announce_surface.get_width() - title_pic.get_width()) / 2, 15)
 		)
-		self.announce_surface.blit(instructions_pic, (25, 90))
-		self.announce_surface.blit(buttons_pic, (25, 115))
+		self.announce_surface.blit(instructions_pic, (30, 65))
+		self.announce_surface.blit(buttons_pic, (30, 90))
 		self.announce_surface.blit(
 				continue_pic,
-				((self.announce_surface.get_width() - continue_pic.get_width()) / 2, 170)
+				((self.announce_surface.get_width() - continue_pic.get_width()) / 2, 160)
 		)
 	
 class BuildPhase(Phase):
@@ -239,7 +239,7 @@ class BattlePhase(Phase):
 		self.actions = battle_actions
 		self.next_phase = lambda: AnnouncePhase(BuildPhase)
 		remove_garbage()
-		self.announce_surface = common.font.render("Shoot at your enemey's walls!", True, (0,0,0))
+		self.announce_surface = common.font.render("Shoot at your enemy's walls!", True, (0,0,0))
 		Phase.__init__(self)
 		game.field.draw_backbuffer(draw_cannons=False)
 		

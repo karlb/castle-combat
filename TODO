@@ -1,31 +1,54 @@
 
 			=== TODO ===
 
-bugs:
-
-0.9.0:
-	- better documentation
+0.9.1:
 	- support for more than two players on one computer
-	- better packaging for linux?
-	- improve "Grunt Assault" game mode
-	- Mouse support
+	- improve "Grunt Assault" game mode (statistics)
 	- windows icon
-	- cleanly close castle-combat on exception
+	- cleanly close castle-combat on exception?
+	- add player names
 
-After 0.9.0 (if ever):
+1.0.0:
 	- AI
-	- Gamepad support
 	- Match-making server and browser
 	- Auto-discovery of servers in same LAN
-	- Alternate Maps
+	- More Maps
 	- Place sensible entries in the MacOS X menu
 	- Add "Player X has been eleminated" messages in more than two player game
 	- Support more players (there can never be enough)
 	- Support higher resolutions / larger maps
 	- Hall of Fame / Scoring system
+	- Optional handicap setting to let players of different skill levels play against each other (slower cannon balls could be a result)
 
+After 1.0 (or maybe never):
+	- Gamepad support
+	- Mouse support
+	- Use sparkle updater under Mac OS X
 
 			=== CHANGELOG ===
+
+Done in 0.9.0:
+	- Fixed serious network bug ("BuildPlayerClient does not have attribute 'pos'")
+	- Code cleanups
+	- Difficulty selection for GruntAssault mode
+	- Fixed crash if not sound card is available and you try to turn the sound off (Thanks John Lightsey)
+	- Fixed typos in documentation (Thanks John Lightsey)
+	- Improved documentation
+	- Backgrounds for all play modes
+	- Fixed bug in initialization of 3 and 4 player "river" games
+
+Done in 0.8.1:
+	- single-player training
+	- Conquer mode
+	- Game-mode/map selection
+	- Cmd-Q quits on mac
+	- colorize castle-selection-novas
+	- add key repeat
+	- a lot of code refactoring, especially the net code 
+	- pause game when pressing escape and allow to stop the game from the pause screen
+	- force server to wait for clients
+	- add a way to turn fullscreen and sound on/off
+	- Clean handling of lost connections during game
 
 Done in 0.8.0:
 	- grunts look in the wrong direction on network clients before they move
@@ -57,17 +80,3 @@ Done in 0.8.0-Alpha2:
 	- remove the seq_* functions in favor of Numerics ufuncs
 	- better performance/more smooth movement in some situations (esp. battle mode)
 	- slightly improved documentation
-
-Done in 0.8.1:
-	- single-player training
-	- Conquer mode
-	- Game-mode/map selection
-	- Cmd-Q quits on mac
-	- colorize castle-selection-novas
-	- add key repeat
-	- a lot of code refactoring, especially the net code 
-	- pause game when pressing escape and allow to stop the game from the pause screen
-	- force server to wait for clients
-	- add a way to turn fullscreen and sound on/off
-	- Clean handling of lost connections during game
-

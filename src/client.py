@@ -71,7 +71,6 @@ class Client:
 
 	def get_server_info_callback(self, info):
 		import game
-		#self.game = game.Game(RiverMap2p, info['number_of_players'])
 		self.game = game.Game(info['players'])
 		self.game.server_game = info['server_game']
 		self.game.set_map(info['map'])

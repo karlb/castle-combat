@@ -1,4 +1,3 @@
-#!/usr/bin/pythonw
 import pygame
 from pygame.locals import *
 import common

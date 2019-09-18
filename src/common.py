@@ -1,11 +1,9 @@
-## Automatically adapted for numpy.oldnumeric Sep 27, 2009 by 
-
 import pygame
 from pygame.locals import *
-from numpy.oldnumeric import *
+from Numeric import *
 import os
 
-debug = False
+debug = True
 
 screen_updates = []
 screen_undraws = []
@@ -198,9 +196,9 @@ def init():
 	screen = pygame.display.set_mode((800, 600), flags)
 	global backbuffer
 	global font
-	font = pygame.font.Font(os.path.join(data_path, 'DefaultFancy.ttf'), 34)
+	font = pygame.font.Font(os.path.join(data_path, 'colourba.ttf'), 34)
 	global small_font
-	small_font = pygame.font.Font(os.path.join(data_path, 'DefaultFancy.ttf'), 20)
+	small_font = pygame.font.Font(os.path.join(data_path, 'colourba.ttf'), 24)
 
 def info(string):
 	from widget import WidgetState
@@ -215,7 +213,7 @@ def info(string):
 
 def coords(stop):
 	i = indices(stop)
-	return zip(i[0].ravel(), i[1].ravel())
+	return zip(i[0].flat, i[1].flat)
 
 def bound(var, lower, upper):
 	return max( min(var, upper), lower)

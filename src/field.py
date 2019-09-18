@@ -1,8 +1,6 @@
-## Automatically adapted for numpy.oldnumeric Sep 27, 2009 by 
-
 import pygame
 from pygame.locals import *
-from numpy.oldnumeric import *
+from Numeric import *
 from random import randint
 from twisted.spread import pb
 from copy import deepcopy
@@ -64,22 +62,22 @@ class Grunt:
 
 		# display grunt on the server and all clients (via callLater because __init__ was called from game.call())
 		from twisted.internet import reactor
-		reactor.callLater(0, lambda:
-			game.server_call("rotate_grunt", self.id, self.direction)
-		)
+		#reactor.callLater(0, lambda:
+		#	game.server_call("rotate_grunt", self.id, self.direction)
+		#)
 	
 	def handle(self, passed_milliseconds):
 		self.time_to_action -= passed_milliseconds
 		if self.time_to_action <= 0:
 			# have a look at my movement possibilities 
-			new_pos = tuple(add(self.pos, self.movement[self.direction]))
+			new_pos = add(self.pos, self.movement[self.direction])
 			if common.is_in_bounds(new_pos):
 				wall_in_front = game.field[new_pos] >= 0
 			else:
 				wall_in_front = False
 			wall_in_sight = randint(0, 3)
 			for i in range(randint(0, 10)):
-				test_pos = tuple(add(self.pos, multiply(self.movement[self.direction], i)))
+				test_pos = add(self.pos, multiply(self.movement[self.direction], i))
 				if not common.is_in_bounds(test_pos) or game.field[test_pos] in (Field.CASTLE, Field.HOUSE, Field.RIVER) + Field.ANY_GARBAGE:
 					wall_in_sight = False
 					break
@@ -147,16 +145,16 @@ class Field:
 			return is_river_large
 
 		def scatter(source):
-			import numpy.oldnumeric.random_array as RandomArray
+			import RandomArray
 			shift3d = RandomArray.randint(-2, 2, (2,) + source.shape)
 			shift = shift3d[1] * source.shape[1] + shift3d[0]
 			length = product(source.shape)
 			source_indices = zeros(source.shape)
-			source_indices.flat[:] = arange(length) + shift.ravel()
+			source_indices.flat[:] = arange(length) + shift.flat
 			source_indices = maximum(source_indices, 0)
 			source_indices = minimum(source_indices, length-1)
 
-			dest = take(source.ravel(), source_indices)
+			dest = take(source.flat, source_indices)
 			
 			return dest
 
@@ -274,7 +272,7 @@ class Field:
 
 			# check which parts have changed
 			different = (old_secured != player.secured)
-			changed_fields = nonzero(different.ravel()).tolist()
+			changed_fields = nonzero(different.flat).tolist()
 			changed_fields.reverse()
 			for index in changed_fields:
 				x, y = divmod(index, field_size)
@@ -300,11 +298,11 @@ class Field:
 			common.flood_fill2(fill_map, (1,1), False, True)
 		else:
 			# just calculate the changes caused by changeing the value at restart_at
-			restart_at = tuple(add(restart_at, 2))
+			restart_at = add(restart_at, 2)
 			fill_map = player.fill_map
 			unsecured_surroundings = fill_map[restart_at[0]-1:restart_at[0]+2, restart_at[1]-1:restart_at[1]+2] == 1
-			if not any(nonzero(ravel(unsecured_surroundings))):
-				restart_at = tuple(subtract(restart_at, 2))
+			if not nonzero(ravel(unsecured_surroundings)):
+				restart_at = subtract(restart_at, 2)
 				player.secured[restart_at] = True
 				#common.backbuffer.blit(player.ground_pic, [restart_at[i] * common.block_size for i in (0,1)])
 				#self.update(restart_at)

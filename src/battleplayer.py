@@ -1,6 +1,6 @@
 import pygame
 from pygame.locals import *
-from numpy.oldnumeric import *
+from Numeric import *
 
 import common
 import random

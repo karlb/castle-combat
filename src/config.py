@@ -62,7 +62,7 @@ class Config:
 	local_players = 2
 	ai_players = 1
 	fullscreen = True
-	sound = False
+	sound = True
 
 def open_config_file(mode):
 	import os
