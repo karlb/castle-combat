@@ -200,7 +200,7 @@ def init():
 	global font
 	font = pygame.font.Font(os.path.join(data_path, 'DefaultFancy.ttf'), 34)
 	global small_font
-	small_font = pygame.font.Font(os.path.join(data_path, 'DefaultFancy.ttf'), 20.5)
+	small_font = pygame.font.Font(os.path.join(data_path, 'DefaultFancy.ttf'), 20)
 
 def info(string):
 	from widget import WidgetState
