@@ -143,30 +143,6 @@ class Player:
 		self.alive = False
 		self.handle_event = self.handle_movement = self.draw_cursor = lambda *args:None
 
-#	def remote_call(self, command, *args):
-		"""Execute a player action on all Clients
-		
-		This function gets called on the server whenever a player wishes to execute an action.
-		The server tries to execute the action, and sends it to all clients if successful.
-		"""
-		assert game.server, "remote_call may only be called on the server!"
-#		from server import ClientAvatar
-#		try:
-#			eval('self.phase_player.remote_' + command)(*args)
-#			#for client in game.server.clients:
-#				#client.remote_players[self.player_id].callRemote(command, *args)
-#			#for o in self.observers:
-#			#	player.callRemote(command, *args)
-#			for ai in game.server.ai_players:
-#				from twisted.internet import reactor
-#				reactor.callLater(0, lambda: ai.act_on_player_event(command, self))
-#			print command, 'succeeded for player', self.player_id
-#		except common.ActionNotPossible:
-#			if self.ai:
-#				from twisted.internet import reactor
-#				reactor.callLater(0, lambda: self.ai.failed_event(command))
-#			print command, 'failed for player', self.player_id		
-
 	# delegations to phase_player
 	def draw_cursor(self, *args, **kwargs):
 		self.phase_player.draw_cursor(*args, **kwargs)
@@ -174,31 +150,6 @@ class Player:
 		self.phase_player.handle_event(*args, **kwargs)
 	def handle_movement(self, *args, **kwargs):
 		self.phase_player.handle_movement(*args, **kwargs)
-
-#	def remote_put_block(self, *args, **kwargs):
-#		self.phase_player.remote_put_block(*args, **kwargs)
-#	def remote_move(self, *args, **kwargs):
-#		self.phase_player.remote_move(*args, **kwargs)
-#	def remote_rotate_block(self, *args, **kwargs):
-#		self.phase_player.remote_draw_cursor(*args, **kwargs)
-#	def remote_generate_block(self, *args, **kwargs):
-#		self.phase_player.remote_draw_cursor(*args, **kwargs)
-#	def remote_place_cannon(self, *args, **kwargs):
-#		self.phase_player.remote_place_cannon(*args, **kwargs)
-#	def remote_change_type(self, *args, **kwargs):
-#		self.phase_player.remote_change_type(*args, **kwargs)
-#	def remote_set_movement(self, *args, **kwargs):
-#		self.phase_player.remote_set_movement(*args, **kwargs)
-#	def remote_shoot(self, *args, **kwargs):
-#		self.phase_player.remote_shoot(*args, **kwargs)
-#	def remote_draw_cursor(self, *args, **kwargs):
-#		self.phase_player.remote_draw_cursor(*args, **kwargs)
-#	def remote_draw_cursor(self, *args, **kwargs):
-#		self.phase_player.remote_draw_cursor(*args, **kwargs)
-
-	#def select_castle(self, *args, **kwargs):
-	#	self.phase_player.select_castle(*args, **kwargs)
-
 
 class PlayerCacheable(Player, pb.Cacheable, pb.Referenceable):
 	def __init__(self, *args, **kwargs):
