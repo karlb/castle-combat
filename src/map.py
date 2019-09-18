@@ -8,32 +8,34 @@ from field import Field, Grunt, Castle
 
 class Map(pb.Copyable, pb.RemoteCopy):
 	game_options = ()
+	build_phase_text = (
+		"Repair your walls!",
+		"Enclose at least one castle to survive.",
+		"Place block / Rotate Block"
+	)
+	place_phase_text = (
+		"Place your cannons!",
+		"Position new cannons inside your walls.",
+		"Place cannon / Select cannon"
+	)
+	battle_phase_text = (
+		"Shoot at your enemy's walls!",
+		"You can also destroy the cannons.",
+		"Shoot / Accelerate movement"
+	)
+	select_phase_text = (
+		"Select your Castle!",
+		"Choose one castle to be your home castle.",
+		"Select Castle / No Action"
+	)
 
-	def __init__(self):
+	def __init__(self, options):
+		pass
+
+	def setup(self):
 		self.castles = []
 		self.houses = 0
 		self.array = zeros(common.field_size) + Field.EMPTY
-		self.build_phase_text = (
-			"Repair your walls!",
-			"Enclose at least one castle to survive.",
-			"Place block / Rotate Block"
-		)
-		self.place_phase_text = (
-			"Place your cannons!",
-			"Position new cannons inside your walls.",
-			"Place cannon / Select cannon"
-		)
-		self.battle_phase_text = (
-			"Shoot at your enemey's walls!",
-			"You can also destroy the cannons.",
-			"Shoot / Accelerate movement"
-		)
-		self.select_phase_text = (
-			"Select your Castle!",
-			"Choose one castle to be your home castle.",
-			"Select Castle / No Action"
-		)
-
 	
 	def apply(self):
 		if 'land_owners' in self.game_options:
@@ -55,6 +57,7 @@ class Map(pb.Copyable, pb.RemoteCopy):
 	def set_land_owners(self):
 		game.field.owner = where(self.array == Field.RIVER, -1, -2)
 		for player in game.players:
+			print "setting land for player", player
 			castle = [castle for castle in self.castles if castle.player is player][0]
 			common.flood_fill(game.field.owner, castle.pos, -2, player.player_id)
 	
@@ -103,17 +106,29 @@ class GruntAssault(Map):
 
 	title = 'Grunt Assault'
 	allowed_players = (1,)
+	background_image = 'back-noriver.jpg'
 
-	def __init__(self):
-		Map.__init__(self)
-		self.houses = 100
+	def __init__(self, options):
+		Map.__init__(self, options)
+		self.difficulty = options['difficulty']
+		self.difficulty_number = dict(
+			very_easy = -20,
+			easy = -10,
+			medium = 0,
+			hard = 10,
+			very_hard = 20,
+		)[self.difficulty]
+
+	def setup(self):
+		Map.setup(self)
+		self.houses = 100 + self.difficulty_number
 		self.castles = [
 			Castle(pos=(3 + randint(0, 7) + i * 11, randint(3, 25)), player=None, map=self)
 			for i in (0,1,2)
 		]
-		self.reinforcement_grunts_left = 150;
+		self.reinforcement_grunts_left = 150 + self.difficulty_number;
 		def send_reinforcements():
-			new_grunts = self.reinforcement_grunts_left / 10;
+			new_grunts = self.reinforcement_grunts_left // 10;
 			self.reinforcement_grunts_left -= new_grunts
 			self.add_grunts(new_grunts)
 		game.build_phase_finished.connect(send_reinforcements, priority=-10)
@@ -183,17 +198,18 @@ class RiverMap(Map):
 	title = 'River'
 	game_options = ('land_owners', )
 
-	def __init__(self):
-		Map.__init__(self)
+	def setup(self):
+		Map.setup(self)
 		self.houses = 20
 
 
 class RiverMap2p(RiverMap):
 
 	allowed_players = (2, )
+	background_image = 'back-river.jpg'
 
-	def __init__(self):
-		RiverMap.__init__(self)
+	def setup(self):
+		RiverMap.setup(self)
 		for y in range(common.field_size[1]):
 			self.array[(common.field_size[0]/2 - 1):(common.field_size[0]/2 + 1), y] = Field.RIVER
 
@@ -203,25 +219,27 @@ class RiverMap2p(RiverMap):
 				Castle(pos=(30 + randint(-2,2), (i+1) * 8 - 2 + randint(-1,1)), player=game.players[1], map=self),
 			]
 
-		self.background_image = 'back.jpg'
-
 class RiverMap4p(RiverMap):
 
 	allowed_players = (3, 4)
+	background_image = 'back-river4.jpg'
 	
-	def __init__(self):
-		RiverMap.__init__(self)
+	def setup(self):
+		RiverMap.setup(self)
 
 		for y in range(common.field_size[1]):
 			self.array[(common.field_size[0]/2 - 1):(common.field_size[0]/2 + 1), y] = Field.RIVER
 		for x in range(common.field_size[0]):
 			self.array[x, (common.field_size[1]/2 - 1):(common.field_size[1]/2 + 1)] = Field.RIVER
 		for i in (0, 1):
-			self.castles += Castle((5 + randint(-1,1) + i*8, 6 + randint(-1,1)), player=0, map=self)
-			self.castles += Castle((25 + randint(-1,1) + i*8, 6 + randint(-1,1)), player=1, map=self)
-			self.castles += Castle((5 + randint(-1,1) + i*8, 21 + randint(-1,1)), player=2, map=self)
-			if (game.number_of_players == 4):
-				self.castles += Castle((25 + randint(-1,1) + i*8, 21 + randint(-1,1)), player=3, map=self)
+			self.castles += [
+				Castle((5 + randint(-1,1) + i*8, 6 + randint(-1,1)), player=game.players[0], map=self),
+				Castle((25 + randint(-1,1) + i*8, 6 + randint(-1,1)), player=game.players[1], map=self),
+			]
+			if game.number_of_players >= 3:
+				self.castles += [Castle((5 + randint(-1,1) + i*8, 21 + randint(-1,1)), player=game.players[2], map=self)]
+			if game.number_of_players >= 4:
+				self.castles += [Castle((25 + randint(-1,1) + i*8, 21 + randint(-1,1)), player=game.players[3], map=self)]
 
 
 class ConquerMap(Map):
@@ -229,9 +247,10 @@ class ConquerMap(Map):
 	title = 'Conquer'
 	game_options = ('build_only_near_walls', )
 	allowed_players = (2, 3, 4)
+	background_image = 'back-noriver.jpg'
 
-	def __init__(self):
-		Map.__init__(self)
+	def setup(self):
+		Map.setup(self)
 		self.houses = 20
 
 		def place_castle():

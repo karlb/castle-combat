@@ -93,12 +93,13 @@ class Server:
 
 	clients = []
 
-	def __init__(self, map_class, total_players):
+	def __init__(self, map, total_players):
 		import player
 		players = [player.PlayerCacheable(i) for i in range(total_players)]
 		import game
 		self.game = game.Game(players=players, server=self)
-		self.game.set_map(map_class())
+		map.setup()
+		self.game.set_map(map)
 		self.ai_players = []
 
 		from twisted.cred.portal import Portal
