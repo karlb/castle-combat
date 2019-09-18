@@ -2,7 +2,13 @@
 
 === Linux ===
 
-Requirements: pygame, twisted.
+Requirements: pygame, twisted, numeric<1.9.
 Installation: No support for installation, yet.
 Running Castle-Combat: just run ./castle-combat
 
+It is recommended to use a virtualenv to run castle-combat.
+
+virtualenv venv
+pip install -r requirements.txt
+source venv/bin/activate
+./castle-combat.py
