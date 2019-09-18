@@ -114,14 +114,13 @@ class Server:
 	def call(self, command, *args):
 		try:
 			eval('self.game.remote_'+command)(*args)
-			for client in self.clients:
-				client.remote_game.callRemote(command, *args)
-			for ai in self.ai_players:
-				ai.act_on_game_event(command)
-			print command, 'successful'
 		except common.ActionNotPossible:
-			print command, 'failed'
+			print command, 'was not possible'
 			return
+		for client in self.clients:
+			client.remote_game.callRemote(command, *args)
+		for ai in self.ai_players:
+			ai.act_on_game_event(command)
 		
 
 	def claim_player_as_local(self):
@@ -154,7 +153,7 @@ class Server:
 
 		for i in range(ai_players):
 			import ai
-			(player_id, avatar) = self.get_player()
+			(player_id, avatar) = self.claim_player_as_local()
 			self.game.players[player_id].local = True
 			newai = ai.DefaultAI(player_id)
 			self.game.players[player_id].ai = newai
