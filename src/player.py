@@ -22,9 +22,6 @@ class BasePlayer:
 	def __init__(self):
 		def repeat_func(dir):
 			looping_call = getattr(self, dir + '_repeat')
-			if looping_call.count == 0:
-				# ignore first call (I don't use LoopingCall.start's now=False arguement to allow usage of old twisted releases)
-				return
 			self.move(self.movement[dir]) 
 			if looping_call.interval != self.repeat_interval:
 				# switch from repeat_threshold to repeat_interval
@@ -56,7 +53,7 @@ class BasePlayer:
 					self.move(self.movement[dir])
 					looping_call = getattr(self, dir + '_repeat')
 					if not looping_call.running:
-						looping_call.start(interval=self.repeat_threshold)
+						looping_call.start(interval=self.repeat_threshold, now=False)
 			if event.key == keys.button[0]:
 				buttons[0]()
 			elif event.key == keys.button[1]:
