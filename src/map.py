@@ -1,6 +1,7 @@
 from random import randint
 from numpy.oldnumeric import *
 from twisted.spread import pb
+from twisted.internet import reactor
 
 import common
 from game import game
@@ -42,7 +43,13 @@ class Map(pb.Copyable, pb.RemoteCopy):
 			self.set_land_owners()
 
 		game.field.array = self.array
-		game.field.add_houses(self.houses)
+		# The callLater makes sure that the field is initialized on the
+		# clients when the houses are added. As a downside, this makes
+		# the houses appear only after pressing the button to start the
+		# game. TODO: remove this ugly hack and find a proper solution!
+		reactor.callLater(0,
+			lambda: game.field.add_houses(self.houses)
+		)
 		self.add_end_test()
 
 		#from field import Castle
