@@ -1,4 +1,5 @@
 from twisted.spread import pb
+from twisted.internet import defer
 import common
 
 class ServerObject(pb.Cacheable, pb.Referenceable):
@@ -41,7 +42,10 @@ def delegate_and_call_observers(cls, to_class, method_names):
 			getattr(to_class, method_name)(self, *args, **kwargs)
 		except common.ActionNotPossible:
 			return
-		for o in self.observers: o.callRemote(method_name, *args, **kwargs)
+		return defer.DeferredList([
+                    o.callRemote(method_name, *args, **kwargs)
+                    for o in self.observers
+                ])
 	def create_method(method_name):
 		return lambda *args, **kwargs: delegate_and_call(method_name, *args, **kwargs)
 		

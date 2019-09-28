@@ -11,8 +11,8 @@ class GameState(State):
 	def handle_keypress(self, event):
 		if common.debug and event.type == KEYDOWN:
 			if event.key == K_BACKSPACE:
-				game.server_call('next_phase')	
-				raise IgnoreEvent
+				d = game.server_call('next_phase')	
+				raise IgnoreEvent(d)
 			if event.key == K_EQUALS:
 				try:
 					import cannon

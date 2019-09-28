@@ -111,7 +111,7 @@ class Player:
 		
 	def init_phase(self, phase):
 		self.phase_player = eval('self.' + phase + '_player')
-		self.phase_player.init()
+		return self.phase_player.init()
 
 	def get_center(self):
 		return self.get_center_and_field_count()[0]

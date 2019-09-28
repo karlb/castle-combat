@@ -1,6 +1,6 @@
 from twisted.spread import pb
 from twisted.cred.portal import IRealm
-from twisted.internet import reactor
+from twisted.internet import reactor, defer
 from widget import WidgetState
 import common
 
@@ -117,10 +117,14 @@ class Server:
 		except common.ActionNotPossible:
 			print command, 'was not possible'
 			return
-		for client in self.clients:
-			client.remote_game.callRemote(command, *args)
+
+                dl = defer.DeferredList([
+                    client.remote_game.callRemote(command, *args)
+                    for client in self.clients
+                ])
 		for ai in self.ai_players:
 			ai.act_on_game_event(command)
+                return dl
 		
 
 	def claim_player_as_local(self):

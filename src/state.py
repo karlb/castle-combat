@@ -3,7 +3,13 @@ from pygame.locals import *
 from twisted.internet import reactor
 
 class IgnoreEvent(Exception):
-	pass
+        """ Stop processing this event
+        
+        Wait until `d` succeeds before processing any other events if `d` is given.
+        """
+
+        def __init__(self, d=None):
+            self.d = d
 
 class State:
 	events = {} # handled when this state is active
@@ -32,12 +38,14 @@ class State:
 			return False
 
 	def handle(self):
+                """ Can return a deferred, in which case nothing happens until that deferred succeeds """
 		pass
 	
 	def init_state_display(self):
 		pass
 
 	def on_event(event):
+                """ Can return a deferred, in which case nothing happens until that deferred succeeds """
 		# get top_state at the beginning, because must not change during the execution
 		try:
 			top_state = State.stack[-1]
@@ -58,9 +66,9 @@ class State:
 				handler = top_state.events[event.type]
 			except KeyError:
 				return
-			handler(top_state, event)
-		except IgnoreEvent:
-			return
+			return handler(top_state, event)
+		except IgnoreEvent as e:
+			return e.d
 	on_event = staticmethod(on_event)
 
 class MainState(State):
@@ -98,13 +106,20 @@ def runStateLoop():
 		event = pygame.event.poll()
 		top_state = State.stack[-1]
 		while (event.type != NOEVENT):
-			top_state.on_event(event)
+			d = top_state.on_event(event)
+                        if d:
+                            d.addCallback(stateLoop)
+                            return
 			event = pygame.event.poll()
-		top_state.stack[-1].handle()
+		d = top_state.stack[-1].handle()
+                if d:
+                    d.addCallback(stateLoop)
+                    return
+                reactor.callLater(0.01, stateLoop)
 
 	from twisted.internet.task import LoopingCall
 	
-	reactor.callWhenRunning( lambda: LoopingCall(stateLoop).start(0.01) )
+	reactor.callWhenRunning(stateLoop)
 	reactor.run()
 
 
