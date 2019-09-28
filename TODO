@@ -1,73 +1,76 @@
 
 			=== TODO ===
 
-bugs:
-
-0.9.0:
-	- better documentation
-	- support for more than two players on one computer
-	- better packaging for linux?
-	- improve "Grunt Assault" game mode
-	- Mouse support
-	- windows icon
-	- cleanly close castle-combat on exception
-
-After 0.9.0 (if ever):
-	- AI
-	- Gamepad support
-	- Match-making server and browser
-	- Auto-discovery of servers in same LAN
-	- Alternate Maps
-	- Place sensible entries in the MacOS X menu
-	- Add "Player X has been eleminated" messages in more than two player game
-	- Support more players (there can never be enough)
-	- Support higher resolutions / larger maps
-	- Hall of Fame / Scoring system
-
+    - support for more than two players on one computer
+    - improve "Grunt Assault" game mode (statistics)
+    - cleanly close castle-combat on exception?
+    - add player names
+    - AI
+    - Match-making server and browser
+    - Auto-discovery of servers in same LAN
+    - More Maps
+    - Add "Player X has been eleminated" messages in more than two player game
+    - Support more players (there can never be enough)
+    - Support higher resolutions / larger maps
+    - Hall of Fame / Scoring system
+    - Optional handicap setting to let players of different skill levels play against each other (slower cannon balls could be a result)
+    - Gamepad support
+    - Mouse support
 
 			=== CHANGELOG ===
 
-Done in 0.8.0:
-	- grunts look in the wrong direction on network clients before they move
-	- more feedback in menus ('connecting to server', 'starting game', etc)
-	- versioned configuration files
-	- prevent players from placing blocks on the wrong river side
-	- added port number to documentation
-	- only allow sane values in menu
-	- fix crash on startup if no sound card is installed (fix not verified, yet)
-	- as always: a lot of small improvements, fixes and clean-ups
-	- Support more than two players
-	- fix event handling:
-		- allow multiple network in a row (reactor start/stop problem)
-		- cleanly handle quit events/escapes
-	- windows release
-
-Done in 0.8.0-Alpha2:
-	- save more configuration data (number of players, sever, etc)
-	- make cannons destructable
-	- AI stubs
-	- houses/grunts
-	- set correct winning condition
-	- select cannons via round-robin 
-	- fix castle/cannon draw bug in build mode
-	- fix wall-in-secured-zone draw bug
-	- Big cannons/garbage
-	- Wall cleanup after build phase
-	- switch all RectangularArrays to Numeric.array (more powerful and much faster)
-	- remove the seq_* functions in favor of Numerics ufuncs
-	- better performance/more smooth movement in some situations (esp. battle mode)
-	- slightly improved documentation
+Done in 0.9.0:
+    - Migrate to python3
+    - Switch to recent numpy version
+    - Fixed serious network bug ("BuildPlayerClient does not have attribute 'pos'")
+    - Code cleanups
+    - Difficulty selection for GruntAssault mode
+    - Fixed crash if not sound card is available and you try to turn the sound off (Thanks John Lightsey)
+    - Fixed typos in documentation (Thanks John Lightsey)
+    - Improved documentation
+    - Backgrounds for all play modes
+    - Fixed bug in initialization of 3 and 4 player "river" games
 
 Done in 0.8.1:
-	- single-player training
-	- Conquer mode
-	- Game-mode/map selection
-	- Cmd-Q quits on mac
-	- colorize castle-selection-novas
-	- add key repeat
-	- a lot of code refactoring, especially the net code 
-	- pause game when pressing escape and allow to stop the game from the pause screen
-	- force server to wait for clients
-	- add a way to turn fullscreen and sound on/off
-	- Clean handling of lost connections during game
+    - single-player training
+    - Conquer mode
+    - Game-mode/map selection
+    - Cmd-Q quits on mac
+    - colorize castle-selection-novas
+    - add key repeat
+    - a lot of code refactoring, especially the net code 
+    - pause game when pressing escape and allow to stop the game from the pause screen
+    - force server to wait for clients
+    - add a way to turn fullscreen and sound on/off
+    - Clean handling of lost connections during game
 
+Done in 0.8.0:
+    - grunts look in the wrong direction on network clients before they move
+    - more feedback in menus ('connecting to server', 'starting game', etc)
+    - versioned configuration files
+    - prevent players from placing blocks on the wrong river side
+    - added port number to documentation
+    - only allow sane values in menu
+    - fix crash on startup if no sound card is installed (fix not verified, yet)
+    - as always: a lot of small improvements, fixes and clean-ups
+    - Support more than two players
+    - fix event handling:
+            - allow multiple network in a row (reactor start/stop problem)
+            - cleanly handle quit events/escapes
+    - windows release
+
+Done in 0.8.0-Alpha2:
+    - save more configuration data (number of players, sever, etc)
+    - make cannons destructable
+    - AI stubs
+    - houses/grunts
+    - set correct winning condition
+    - select cannons via round-robin 
+    - fix castle/cannon draw bug in build mode
+    - fix wall-in-secured-zone draw bug
+    - Big cannons/garbage
+    - Wall cleanup after build phase
+    - switch all RectangularArrays to Numeric.array (more powerful and much faster)
+    - remove the seq_* functions in favor of Numerics ufuncs
+    - better performance/more smooth movement in some situations (esp. battle mode)
+    - slightly improved documentation
