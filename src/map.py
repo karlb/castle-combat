@@ -1,4 +1,5 @@
 from random import randint
+import numpy as np
 from numpy import *
 from twisted.spread import pb
 from twisted.internet import reactor
@@ -36,7 +37,7 @@ class Map(pb.Copyable, pb.RemoteCopy):
 	def setup(self):
 		self.castles = []
 		self.houses = 0
-		self.array = zeros(common.field_size) + Field.EMPTY
+		self.array = zeros(common.field_size, dtype=np.uint8) + Field.EMPTY
 	
 	def apply(self):
 		if 'land_owners' in self.game_options:
@@ -64,21 +65,21 @@ class Map(pb.Copyable, pb.RemoteCopy):
 	def set_land_owners(self):
 		game.field.owner = where(self.array == Field.RIVER, -1, -2)
 		for player in game.players:
-			print "setting land for player", player
+			print("setting land for player", player)
 			castle = [castle for castle in self.castles if castle.player is player][0]
 			common.flood_fill(game.field.owner, castle.pos, -2, player.player_id)
 	
 	def add_end_test(self):
 		def standard_end_test():
-			alive = filter(lambda player: player.alive, game.players)
-			print "end test %d" % len(alive)
+			alive = [player for player in game.players if player.alive]
+			print("end test %d" % len(alive))
 			if len(alive) > 1:			
 				return
 			if len(alive) == 0:
 				string = "Draw game!"
 			else:
 				string = "%s wins!" % alive[0].name
-			print "game end"
+			print("game end")
 			
 			from widget import Button, WidgetState
 			class EndState(WidgetState):
@@ -218,7 +219,7 @@ class RiverMap2p(RiverMap):
 	def setup(self):
 		RiverMap.setup(self)
 		for y in range(common.field_size[1]):
-			self.array[(common.field_size[0]/2 - 1):(common.field_size[0]/2 + 1), y] = Field.RIVER
+			self.array[(common.field_size[0]//2 - 1):(common.field_size[0]//2 + 1), y] = Field.RIVER
 
 		for i in (0, 1, 2):
 			self.castles += [
@@ -264,7 +265,7 @@ class ConquerMap(Map):
 			def is_place_suitable(pos):
 				# would the walls be inside the field?
 				for i in (0,1):
-					if pos[i] not in range(3, common.field_size[i]-4):
+					if pos[i] not in list(range(3, common.field_size[i]-4)):
 						return False
 
 				# enough free room?

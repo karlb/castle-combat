@@ -3,13 +3,13 @@ from pygame.locals import *
 from twisted.internet import reactor
 
 class IgnoreEvent(Exception):
-        """ Stop processing this event
-        
-        Wait until `d` succeeds before processing any other events if `d` is given.
-        """
+	""" Stop processing this event
+	
+	Wait until `d` succeeds before processing any other events if `d` is given.
+	"""
 
-        def __init__(self, d=None):
-            self.d = d
+	def __init__(self, d=None):
+	    self.d = d
 
 class State:
 	events = {} # handled when this state is active
@@ -17,13 +17,13 @@ class State:
 	stack = []
 
 	def __init__(self):
-		print 'new state', self
+		print('new state', self)
 		State.stack.append(self)
 		self.init_state_display()
 
 	def quit(self):
 		"""leave this state"""
-		print 'leaving state', self
+		print('leaving state', self)
 		removedState = State.stack.pop()
 		assert removedState == self, ("Can only leave active state. Tried to exit %s but %s is active" % (self, removedState))
 		if len(State.stack) > 0:
@@ -38,14 +38,14 @@ class State:
 			return False
 
 	def handle(self):
-                """ Can return a deferred, in which case nothing happens until that deferred succeeds """
+		""" Can return a deferred, in which case nothing happens until that deferred succeeds """
 		pass
 	
 	def init_state_display(self):
 		pass
 
 	def on_event(event):
-                """ Can return a deferred, in which case nothing happens until that deferred succeeds """
+		""" Can return a deferred, in which case nothing happens until that deferred succeeds """
 		# get top_state at the beginning, because must not change during the execution
 		try:
 			top_state = State.stack[-1]
@@ -82,7 +82,7 @@ class MainState(State):
 
 	def handle(self):
 		# quit if only MainState is left
-		print 'q'
+		print('q')
 		self.quit()
 
 	def quit(self):
@@ -107,15 +107,15 @@ def runStateLoop():
 		top_state = State.stack[-1]
 		while (event.type != NOEVENT):
 			d = top_state.on_event(event)
-                        if d:
-                            d.addCallback(stateLoop)
-                            return
+			if d:
+			    d.addCallback(stateLoop)
+			    return
 			event = pygame.event.poll()
 		d = top_state.stack[-1].handle()
-                if d:
-                    d.addCallback(stateLoop)
-                    return
-                reactor.callLater(0.01, stateLoop)
+		if d:
+		    d.addCallback(stateLoop)
+		    return
+		reactor.callLater(0.01, stateLoop)
 
 	from twisted.internet.task import LoopingCall
 	

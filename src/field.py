@@ -117,7 +117,7 @@ class Grunt:
 class Field:
 	
 	# all values >= 0 are walls belonging to the player with that index
-	(EMPTY, GARBAGE_OLD, GARBAGE_MED, GARBAGE_NEW, RIVER, CANNON, CASTLE, HOUSE, GRUNT) = range(-1, -10, -1)
+	(EMPTY, GARBAGE_OLD, GARBAGE_MED, GARBAGE_NEW, RIVER, CANNON, CASTLE, HOUSE, GRUNT) = list(range(-1, -10, -1))
 	ANY_GARBAGE = GARBAGE_OLD, GARBAGE_MED, GARBAGE_NEW
 
 	obstacle_pic = {
@@ -129,7 +129,7 @@ class Field:
 
 	def __init__(self, map):
 		self.map = map
-		self.array = zeros(common.field_size) + Field.EMPTY
+		self.array = zeros(common.field_size, dtype=np.uint8) + Field.EMPTY
 
 	def init(self):
 		self.map.apply()
@@ -146,9 +146,9 @@ class Field:
 			return is_river_large
 
 		def scatter(source):
-                        return source
-                        # implementation unmaintained
-                        """
+			return source
+			# implementation unmaintained
+			"""
 			import numpy.oldnumeric.random_array as RandomArray
 			shift3d = RandomArray.randint(-2, 2, (2,) + source.shape)
 			shift = shift3d[1] * source.shape[1] + shift3d[0]
@@ -161,7 +161,7 @@ class Field:
 			dest = take(source.ravel(), source_indices)
 			
 			return dest
-                        """
+			"""
 
 		def colorize(source):
 			dest = zeros(source.shape + (3,))
@@ -180,7 +180,7 @@ class Field:
 		pixels = colorize(pixels)
 		t4 = time.clock()
 		
-		print "Background creation timing:", t2-t1, t3-t2, t4-t3
+		print("Background creation timing:", t2-t1, t3-t2, t4-t3)
 				
 		self.surface = pygame.surfarray.make_surface(pixels)
 		common.backbuffer = self.surface.convert()
@@ -189,7 +189,7 @@ class Field:
 		try:
 			return self.array[index]
 		except IndexError:
-			raise IndexError, "Wrong Index: " + str(index)
+			raise IndexError("Wrong Index: " + str(index))
 
 	def __setitem__(self, index, value):
 		self.array[index] = value
@@ -213,7 +213,7 @@ class Field:
 		screen_pos = multiply(pos, common.block_size) 
 		if self[pos] >= 0:
 			common.backbuffer.blit(game.players[self[pos]].wall_pic, screen_pos)
-		elif self[pos] in self.obstacle_pic.keys():
+		elif self[pos] in list(self.obstacle_pic.keys()):
 			common.backbuffer.blit(self.obstacle_pic[self[pos]], screen_pos)
 		elif self[pos] == self.CANNON:
 			for can in game.cannons:
@@ -322,13 +322,13 @@ class Field:
 
 		# eleminate other player's walls
 		foreign_walls = player.secured * (self.array >= 0) * (self.array != player.player_id)
-		putmask(self.array, foreign_walls, zeros(self.array.shape, dtype=np.int64) + Field.EMPTY)
+		putmask(self.array, foreign_walls, zeros(self.array.shape, dtype=np.int16) + Field.EMPTY)
 
 		# now we know which areas are secured, so let's update the screen
 		update_screen(old_secured, foreign_walls)
 
 		t4 = time.clock()
-		print 'Setup:', t2-t1, '+ Flood Fill:', t3-t2, '+ Redraw:', t4-t3, '= Total:', t4-t1
+		print('Setup:', t2-t1, '+ Flood Fill:', t3-t2, '+ Redraw:', t4-t3, '= Total:', t4-t1)
 
 	def kill_grunt_if_there_is_one(self, pos):
 		if self[pos] == self.GRUNT:

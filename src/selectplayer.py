@@ -40,7 +40,7 @@ class SelectPlayer(BasePlayer):
 		self.selected_castle.selected = False
 		index = self.available_castles().index(self.selected_castle)
 		index += change
-		if index not in range(len(self.available_castles())):
+		if index not in list(range(len(self.available_castles()))):
 			index %= len(self.available_castles())
 		self.selected_castle = self.available_castles()[index]
 		self.selected_castle.selected = True

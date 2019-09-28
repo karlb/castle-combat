@@ -27,7 +27,7 @@ class NewGameState(WidgetState):
 
 		def on_total_change():
 			self.local_players.value = min(self.local_players.value, self.total_players.value)
-			self.local_players.choices = range(self.total_players.value, 0, -1)
+			self.local_players.choices = list(range(self.total_players.value, 0, -1))
 			from map import maps
 			self.map.choices = [m.title for m in maps if self.total_players.value in m.allowed_players]
 			on_map_change()
@@ -144,7 +144,7 @@ class MenuState(WidgetState):
 			from webbrowser import open
 			from os.path import abspath
 			file = "file://" + abspath("data/doc/rules.html")
-			print file
+			print(file)
 			open(file, new=True)
 
 		draw_background()

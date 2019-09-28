@@ -126,7 +126,7 @@ class Player:
 					counter += 1
 
 		if counter > 0:
-			self.center = [xsum / counter, ysum / counter]
+			self.center = [xsum // counter, ysum // counter]
 
 		return self.center[:], counter
 

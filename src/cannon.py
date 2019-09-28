@@ -14,7 +14,7 @@ class Shot:
 	def __init__(self, cannon, target):
 		game.shots.append(self)
 		self.cannon = cannon
-		self.origin = map(lambda x: (x + cannon.size*0.5) * common.block_size, cannon.pos)
+		self.origin = [(x + cannon.size*0.5) * common.block_size for x in cannon.pos]
 		self.target = tuple(target)
 		self.time_since_start = 0.0
 		self.time_to_target = math.hypot(self.origin[0] - target[0], self.origin[1] - target[1]) * 7
@@ -24,7 +24,7 @@ class Shot:
 		common.blit(self.shot_pic, self.get_pos(), centered=True)
 		
 	def get_pos(self):
-		return map(lambda o, t: o * (1-self.ratio) + t * self.ratio, self.origin, self.target)
+		return list(map(lambda o, t: o * (1-self.ratio) + t * self.ratio, self.origin, self.target))
 		
 	def handle(self, passed_milliseconds):
 		self.time_since_start += passed_milliseconds
@@ -38,8 +38,8 @@ class Shot:
 			self.ratio = 1
 			game.shots.remove(self)
 			if game.server:
-				x = int(self.get_pos()[0]) / common.block_size
-				y = int(self.get_pos()[1]) / common.block_size
+				x = int(self.get_pos()[0]) // common.block_size
+				y = int(self.get_pos()[1]) // common.block_size
 				game.server_call("hit", (x,y), self.cannon.id)
 				
 
@@ -86,7 +86,7 @@ class Cannon(common.AutoReloader):
 		game.cannons.append(self)
 
 	def hit(self):
-		print "cannon hit!"
+		print("cannon hit!")
 		self.hitpoints -= 1
 		if self.hitpoints == 0:
 			self.static_pic = self.destroyed_pic[self.type][randint(0, 4)]
@@ -116,6 +116,6 @@ class Cannon(common.AutoReloader):
 		try:
 			common.blit(self.cannon_pic[pic], (self.pos[0]*common.block_size, self.pos[1]*common.block_size) )
 		except IndexError:
-			print pic, angle
+			print(pic, angle)
 			raise
 

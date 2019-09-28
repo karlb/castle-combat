@@ -33,12 +33,12 @@ class ClientAvatar(pb.Avatar):
 		self.server = server
 		self.mind = mind
 		self.ready = False
-		print "One client connected. Total: %d" % len(self.server.clients)
+		print("One client connected. Total: %d" % len(self.server.clients))
 		
 	##### callbacks
 
 	def logout_callback(self):
-		print self, "logged out"
+		print(self, "logged out")
 		self.server.clients.remove(self)
 
 		# quit game_state if it didn't quit already
@@ -115,16 +115,16 @@ class Server:
 		try:
 			eval('self.game.remote_'+command)(*args)
 		except common.ActionNotPossible:
-			print command, 'was not possible'
+			print(command, 'was not possible')
 			return
 
-                dl = defer.DeferredList([
-                    client.remote_game.callRemote(command, *args)
-                    for client in self.clients
-                ])
+		dl = defer.DeferredList([
+		    client.remote_game.callRemote(command, *args)
+		    for client in self.clients
+		])
 		for ai in self.ai_players:
 			ai.act_on_game_event(command)
-                return dl
+		return dl
 		
 
 	def claim_player_as_local(self):
@@ -140,7 +140,7 @@ class Server:
 		all_clients_ready = False not in [client.ready for client in self.clients]
 		all_players_connected = False not in [player.connected for player in self.game.players]
 		if all_players_connected and all_clients_ready:
-			print "Stopping to listen"
+			print("Stopping to listen")
 			self.listening_port.stopListening()
 			reactor.callLater(0, lambda: self.game.server_call("run"))
 		
@@ -164,7 +164,7 @@ class Server:
 			self.ai_players.append(newai)
 
 	def quit(self):
-		print "Disconnecting all clients"
+		print("Disconnecting all clients")
 		for client in self.clients:
 			client.mind.broker.transport.loseConnection()
 		self.listening_port.stopListening()

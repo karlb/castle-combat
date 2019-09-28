@@ -18,7 +18,7 @@ class PlacePlayer(BasePlayer):
 	def init(self):
 		BasePlayer.init(self)
 		(self.pos, secured_fields) = self.player.get_center_and_field_count()
-		self.new_cannons = secured_fields / 300
+		self.new_cannons = secured_fields // 300
 		for castle in game.field.map.castles:
 			if self.player.secured[castle.pos]:
 				if castle.big:

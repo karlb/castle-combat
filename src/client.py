@@ -33,7 +33,7 @@ class ClientMind(pb.Referenceable):
 class ClientFactory(pb.PBClientFactory):
 
 	def clientConnectionLost(self, connector, reason, reconnecting=0):
-		print "Connection to server lost: %s" % reason
+		print("Connection to server lost: %s" % reason)
 		self.client.game.game_state.quit()
 
 class Client:
@@ -56,7 +56,7 @@ class Client:
 	##### callbacks
 
 	def connected_callback(self, perspective):
-		print "connected."
+		print("connected.")
 		self.perspective = perspective
 		d = self.perspective.callRemote('get_server_info')
 		d.addCallback(self.get_server_info_callback)
@@ -67,7 +67,7 @@ class Client:
 		self.perspective.callRemote('client_ready')
 
 	def failure_callback(self, error):
-		print "login failure:", error
+		print("login failure:", error)
 
 	def get_server_info_callback(self, info):
 		import game
@@ -81,7 +81,7 @@ class Client:
 		
 		def player_claimed(player):
 			player.local = True
-			print "got player %d!" % player.player_id
+			print("got player %d!" % player.player_id)
 
 		for i in range(self.local_players):
 			d = self.perspective.callRemote('claim_player_as_local')

@@ -14,7 +14,7 @@ def get_opts():
 	try:
 		opts, args = getopt.getopt(sys.argv[1:], "s", ["server"])
 	except getopt.GetoptError:
-		print "Wrong parameter. Sorry."
+		print("Wrong parameter. Sorry.")
 		sys.exit(2)
 	output = None
 	verbose = False

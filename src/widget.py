@@ -44,7 +44,7 @@ class Widget(object):
 		elif surfaces != None:
 			(self.normal_surface, self.highlight_surface) = surfaces
 		else:
-			raise Exception, "text or surfaces argument required"
+			raise Exception("text or surfaces argument required")
 		self.inactive_surface = None
 		# negative positions are distance from screen edge
 		pos = list(pos)
@@ -64,7 +64,7 @@ class Widget(object):
 				# Create 50% transparent surface
 				self.inactive_surface = self.normal_surface.convert_alpha()
 				alpha = pygame.surfarray.pixels_alpha(self.inactive_surface)
-				divide(alpha, array(2).astype(np.uint8), alpha)
+				np.floor_divide(alpha, array(2).astype(np.uint8), alpha)
 				del alpha
 			common.blit(self.inactive_surface, self.pos)
 			self.highlighted = False
@@ -80,7 +80,7 @@ class Widget(object):
 			self.highlighted = True
 			mouse_pos = pygame.mouse.get_pos()
 			for i in (0,1):
-				if mouse_pos[i] not in range(self.pos[i], self.pos[i] + self.normal_surface.get_size()[i]):
+				if not self.pos[i] <= mouse_pos[i] <= self.pos[i] + self.normal_surface.get_size()[i]:
 					self.highlighted = False
 		else:
 			self.highlighted = Widget.freeze_highlight == self
@@ -116,8 +116,8 @@ class Label(Widget):
 
 class SpinBox(Widget):
 
-	up = map(lambda col: common.colorize(common.load_image("arrow.png", alpha=True), col), ( (0,0,0), (150,0,0) ))
-	down = map(lambda surf: pygame.transform.flip(surf, False, True), up)
+	up = [common.colorize(common.load_image("arrow.png", alpha=True), col) for col in ( (0,0,0), (150,0,0) )]
+	down = [pygame.transform.flip(surf, False, True) for surf in up]
 	_hidden = False
 
 	def __init__(self, label, pos, choices, default=None, on_change=None):
@@ -169,7 +169,7 @@ class SpinBox(Widget):
 			try:
 				self.index = self.choices.index(value)
 			except NameError:
-				raise NameError, "Could not find value in list of choices!"
+				raise NameError("Could not find value in list of choices!")
 		def fget(self):
 			return self.choices[self.index]
 		return locals()
@@ -214,8 +214,8 @@ class LineEdit(Widget):
 				self.widget.value = self.widget.value[:-1]
 			elif event.key in (K_RETURN, K_ESCAPE):
 				self.quit()
-			elif event.unicode:
-				self.widget.value += event.unicode
+			elif event.str:
+				self.widget.value += event.str
 			self.widget.update_text(self.show_cursor)
 
 		events = {

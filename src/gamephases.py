@@ -17,9 +17,9 @@ class GameState(State):
 				try:
 					import cannon
 					reload(cannon)
-					print "reload successful"
+					print("reload successful")
 				except:
-					print "WARNING: Module reload failed!"
+					print("WARNING: Module reload failed!")
 					import traceback
 					traceback.print_exc() 
 
@@ -57,7 +57,7 @@ class Phase(State):
 			passed_milliseconds = min(self.clock.tick(), 500)
 			# handle redraws and other actions that occur each frame
 			self.actions(passed_milliseconds)
- 			for player in game.players:
+			for player in game.players:
 				player.handle_movement(passed_milliseconds)
 				player.draw_cursor()
 			self.time_left -= passed_milliseconds * 0.001
@@ -205,7 +205,7 @@ class PlacePhase(Phase):
 		Phase.__init__(self)
 		
 	def phase_end(self):
-		return self.time_left <= 0 or not filter(lambda player: player.place_player.new_cannons > 0, game.players)
+		return self.time_left <= 0 or not [player for player in game.players if player.place_player.new_cannons > 0]
 
 	def cleanup(self):
 		pygame.time.set_timer(USEREVENT, 0)
@@ -266,7 +266,7 @@ class SelectPhase(Phase):
 		Phase.__init__(self)
 		
 	def phase_end(self):
-		return self.time_left <= 0 or not filter(lambda player: not player.select_player.finished, game.players)
+		return self.time_left <= 0 or not [player for player in game.players if not player.select_player.finished]
 
 	def cleanup(self):
 		for player in game.players:

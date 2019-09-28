@@ -48,7 +48,7 @@ class PlayerConfig:
 		from game import game
 		for player in game.players:
 			if player.local:
-				print "assign config", i, "to player", player.player_id
+				print("assign config", i, "to player", player.player_id)
 				config = PlayerConfig.instances[i]
 				i += 1
 			else:
@@ -75,24 +75,24 @@ def open_config_file(mode):
 def save():
 	conf.player_configs = PlayerConfig.instances
 	conf.version = 1
-	file = open_config_file('w')
+	file = open_config_file('wb')
 	import pickle
 	pickle.dump(conf, file)
 
 def load():
 	global conf
 	try:
-		file = open_config_file('r')
+		file = open_config_file('rb')
 		import pickle
 		conf = pickle.load(file)
 		try:
 			if conf.version != 1:
 				raise "Unknown config file version."
 		except AttributeError:
-			print "Updating config file from alpha version"
+			print("Updating config file from alpha version")
 		PlayerConfig.instances = conf.player_configs
 	except IOError:
-		print "Could not load user's config file, loading defaults."
+		print("Could not load user's config file, loading defaults.")
 		for i in range(4):
 			PlayerConfig(i)
 		conf = Config()

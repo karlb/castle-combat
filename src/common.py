@@ -32,9 +32,9 @@ def load_image(name, colorkey=None, alpha=False):
 	fullname = os.path.join(data_path, 'gfx', name)
 	try:
 		image = pygame.image.load(fullname)
-	except pygame.error, message:
-		print 'Cannot load image:', name
-		raise SystemExit, message
+	except pygame.error as message:
+		print('Cannot load image:', name)
+		raise SystemExit(message)
 	if alpha:
 		image = image.convert_alpha()
 	else:
@@ -112,7 +112,7 @@ class MetaInstanceTracker(type):
         return t
     def __instances__(self):
         instances = [(r, r()) for r in self.__instance_refs__]
-        instances = filter(lambda (x,y): y is not None, instances)
+        instances = [x_y for x_y in instances if x_y[1] is not None]
         self.__instance_refs__ = [r for (r, o) in instances]
         return [o for (r, o) in instances]
     def __call__(self, *args, **kw):
@@ -120,8 +120,8 @@ class MetaInstanceTracker(type):
         self.__instance_refs__.append(weakref.ref(instance))
         return instance
 
-class InstanceTracker:
-    __metaclass__ = MetaInstanceTracker
+class InstanceTracker(metaclass=MetaInstanceTracker):
+    pass
 
 class MetaAutoReloader(MetaInstanceTracker):
     def __new__(cls, name, bases, ns):
@@ -129,7 +129,7 @@ class MetaAutoReloader(MetaInstanceTracker):
             cls, name, bases, ns)
         f = inspect.currentframe().f_back
         for d in [f.f_locals, f.f_globals]:
-            if d.has_key(name):
+            if name in d:
                 old_class = d[name]
                 for instance in old_class.__instances__():
                     instance.change_class(new_class)
@@ -147,8 +147,7 @@ class MetaAutoReloader(MetaInstanceTracker):
                 break
         return new_class
 
-class AutoReloader:
-    __metaclass__ = MetaAutoReloader
+class AutoReloader(metaclass=MetaAutoReloader):
     def change_class(self, new_class):
         self.__class__ = new_class
 
@@ -173,14 +172,14 @@ class Signal:
 		self.callbacks_by_priority[priority].append(callback)
 
 	def disconnect(self, callback):
-		for prio in self.callbacks_by_priority.keys():
+		for prio in list(self.callbacks_by_priority.keys()):
 			try:
 				self.callbacks_by_priority[prio].remove(callback)
 			except:
 				pass	
 	
 	def emit(self, *args, **kwargs):
-		keys = self.callbacks_by_priority.keys()
+		keys = list(self.callbacks_by_priority.keys())
 		keys.sort()
 		keys.reverse()
 		for key in keys:
@@ -214,7 +213,7 @@ def info(string):
 
 def coords(stop):
 	i = indices(stop)
-	return zip(i[0].ravel(), i[1].ravel())
+	return list(zip(i[0].ravel(), i[1].ravel()))
 
 def bound(var, lower, upper):
 	return max( min(var, upper), lower)
