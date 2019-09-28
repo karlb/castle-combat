@@ -1,8 +1,7 @@
-## Automatically adapted for numpy.oldnumeric Sep 27, 2009 by 
-
 import pygame
 from pygame.locals import *
-from numpy.oldnumeric import *
+import numpy as np
+from numpy import *
 import os
 
 debug = False
@@ -82,7 +81,7 @@ def colorize(surface, color):
 	#pixel_array = pixel_array * color
 	#pixel_array /= 255
 	#pygame.surfarray.blit_array(surface, pixel_array)
-	col = array(color, UInt8)
+	col = array(color, np.uint8)
 	for line in pixel_array:
 		for pixel in line:
 			for i in (0,1,2):
@@ -99,7 +98,7 @@ def multiply_alpha(surface, factor):
 		surface = surface.convert()
 
 	alpha = pygame.surfarray.pixels_alpha(surface)
-	divide(alpha, array(factor).astype(UInt8), alpha)
+	divide(alpha, array(factor).astype(np.uint8), alpha)
 	#multiply(alpha, array(factor), alpha)
 	return surface
 

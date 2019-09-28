@@ -1,8 +1,7 @@
-## Automatically adapted for numpy.oldnumeric Sep 27, 2009 by 
-
 import pygame
 from pygame.locals import *
-from numpy.oldnumeric import *
+import numpy as np
+from numpy import *
 from random import randint
 from twisted.spread import pb
 from copy import deepcopy
@@ -147,6 +146,9 @@ class Field:
 			return is_river_large
 
 		def scatter(source):
+                        return source
+                        # implementation unmaintained
+                        """
 			import numpy.oldnumeric.random_array as RandomArray
 			shift3d = RandomArray.randint(-2, 2, (2,) + source.shape)
 			shift = shift3d[1] * source.shape[1] + shift3d[0]
@@ -159,6 +161,7 @@ class Field:
 			dest = take(source.ravel(), source_indices)
 			
 			return dest
+                        """
 
 		def colorize(source):
 			dest = zeros(source.shape + (3,))
@@ -273,11 +276,8 @@ class Field:
 			field_size = common.field_size[1]
 
 			# check which parts have changed
-			different = (old_secured != player.secured)
-			changed_fields = nonzero(different.ravel()).tolist()
-			changed_fields.reverse()
-			for index in changed_fields:
-				x, y = divmod(index, field_size)
+			changed_fields = np.argwhere(old_secured != player.secured)
+			for x, y in changed_fields:
 				# the screen has changed at x, y => update the screen
 				if not old_secured[x,y]:
 					screen_pos = (x*block_size, y*block_size)
@@ -322,7 +322,7 @@ class Field:
 
 		# eleminate other player's walls
 		foreign_walls = player.secured * (self.array >= 0) * (self.array != player.player_id)
-		putmask(self.array, foreign_walls, zeros(self.array.shape) + Field.EMPTY)
+		putmask(self.array, foreign_walls, zeros(self.array.shape, dtype=np.int64) + Field.EMPTY)
 
 		# now we know which areas are secured, so let's update the screen
 		update_screen(old_secured, foreign_walls)

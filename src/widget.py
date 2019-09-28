@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
-from numpy.oldnumeric import *
+import numpy as np
+from numpy import *
 import common
 from state import State, IgnoreEvent
 
@@ -63,7 +64,7 @@ class Widget(object):
 				# Create 50% transparent surface
 				self.inactive_surface = self.normal_surface.convert_alpha()
 				alpha = pygame.surfarray.pixels_alpha(self.inactive_surface)
-				divide(alpha, array(2).astype(UInt8), alpha)
+				divide(alpha, array(2).astype(np.uint8), alpha)
 				del alpha
 			common.blit(self.inactive_surface, self.pos)
 			self.highlighted = False

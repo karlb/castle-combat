@@ -1,5 +1,5 @@
 from random import randint
-from numpy.oldnumeric import *
+from numpy import *
 from twisted.spread import pb
 from twisted.internet import reactor
 
