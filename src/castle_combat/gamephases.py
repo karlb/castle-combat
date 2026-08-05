@@ -13,17 +13,6 @@ class GameState(State):
             if event.key == K_BACKSPACE:
                 d = game.server_call("next_phase")
                 raise IgnoreEvent(d)
-            if event.key == K_EQUALS:
-                try:
-                    from . import cannon
-
-                    reload(cannon)
-                    print("reload successful")
-                except:
-                    print("WARNING: Module reload failed!")
-                    import traceback
-
-                    traceback.print_exc()
 
     def handle(self):
         game.phase = game.phase.next_phase()

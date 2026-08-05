@@ -48,3 +48,10 @@ def test_data_files_are_found_next_to_the_code():
 
 def test_images_load():
     assert common.load_image("castle.png").get_size() > (0, 0)
+
+
+def test_colorkey_is_taken_from_the_top_left_pixel():
+    """The cannon sprites ask for this by passing -1 positionally"""
+    image = common.load_image("cannon0001.png", -1)
+
+    assert image.get_colorkey()[:3] == tuple(image.get_at((0, 0)))[:3]
