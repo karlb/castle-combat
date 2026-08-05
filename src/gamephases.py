@@ -53,7 +53,7 @@ class Phase(State):
         if self.phase_end():
             game.server_call("next_phase")
         else:
-            passed_milliseconds = min(self.clock.tick(), 500)
+            passed_milliseconds = min([self.clock.tick(), 500])
             # handle redraws and other actions that occur each frame
             self.actions(passed_milliseconds)
             for player in game.players:

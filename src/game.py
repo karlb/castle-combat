@@ -45,7 +45,7 @@ class Game(pb.Referenceable, common.Borg):
         self.field = field.Field(map)
 
     def print_time(self):
-        time = int(max(self.phase.time_left, 0))
+        time = int(max([self.phase.time_left, 0]))
         time_surface = common.font.render(str(time), True, (0, 0, 0))
         common.blit(
             time_surface,

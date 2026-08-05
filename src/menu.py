@@ -27,7 +27,7 @@ class NewGameState(WidgetState):
 
         def on_total_change():
             self.local_players.value = min(
-                self.local_players.value, self.total_players.value
+                [self.local_players.value, self.total_players.value]
             )
             self.local_players.choices = list(range(self.total_players.value, 0, -1))
             from map import maps

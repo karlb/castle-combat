@@ -156,7 +156,7 @@ class Field:
 
     def __init__(self, map):
         self.map = map
-        self.array = zeros(common.field_size, dtype=np.uint8) + Field.EMPTY
+        self.array = zeros(common.field_size, dtype=np.int8) + Field.EMPTY
 
     def init(self):
         self.map.apply()
@@ -367,7 +367,7 @@ class Field:
         putmask(
             self.array,
             foreign_walls,
-            zeros(self.array.shape, dtype=np.int16) + Field.EMPTY,
+            zeros(self.array.shape, dtype=np.int8) + Field.EMPTY,
         )
 
         # now we know which areas are secured, so let's update the screen

@@ -38,7 +38,7 @@ class Map(pb.Copyable, pb.RemoteCopy):
     def setup(self):
         self.castles = []
         self.houses = 0
-        self.array = zeros(common.field_size, dtype=np.uint8) + Field.EMPTY
+        self.array = zeros(common.field_size, dtype=np.int8) + Field.EMPTY
 
     def apply(self):
         if "land_owners" in self.game_options:

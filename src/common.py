@@ -249,7 +249,7 @@ def coords(stop):
 
 
 def bound(var, lower, upper):
-    return max(min(var, upper), lower)
+    return max([min([var, upper]), lower])
 
 
 def is_in_bounds(pos):
