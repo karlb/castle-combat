@@ -2,6 +2,10 @@ import pygame
 from pygame.locals import *
 
 from .widget import *
+
+# numpy's star import above shadows these builtins with array reductions,
+# where min(a, b) silently means min(a, axis=b)
+from builtins import min, max
 from . import common
 from . import sound
 from .config import conf, PlayerConfig

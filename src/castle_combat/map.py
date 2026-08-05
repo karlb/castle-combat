@@ -38,7 +38,7 @@ class Map(pb.Copyable, pb.RemoteCopy):
     def setup(self):
         self.castles = []
         self.houses = 0
-        self.array = zeros(common.field_size, dtype=np.uint8) + Field.EMPTY
+        self.array = zeros(common.field_size, dtype=np.int16) + Field.EMPTY
 
     def apply(self):
         if "land_owners" in self.game_options:
@@ -255,11 +255,11 @@ class RiverMap4p(RiverMap):
 
         for y in range(common.field_size[1]):
             self.array[
-                (common.field_size[0] / 2 - 1) : (common.field_size[0] / 2 + 1), y
+                (common.field_size[0] // 2 - 1) : (common.field_size[0] // 2 + 1), y
             ] = Field.RIVER
         for x in range(common.field_size[0]):
             self.array[
-                x, (common.field_size[1] / 2 - 1) : (common.field_size[1] / 2 + 1)
+                x, (common.field_size[1] // 2 - 1) : (common.field_size[1] // 2 + 1)
             ] = Field.RIVER
         for i in (0, 1):
             self.castles += [

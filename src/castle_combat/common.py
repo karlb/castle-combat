@@ -2,6 +2,10 @@ import pygame
 from pygame.locals import *
 import numpy as np
 from numpy import *
+
+# numpy's star import above shadows these builtins with array reductions,
+# where min(a, b) silently means min(a, axis=b)
+from builtins import min, max
 import os
 
 debug = False
@@ -96,8 +100,9 @@ def colorize(surface, color):
         surface = surface.convert()
 
     pixel_array = pygame.surfarray.pixels3d(surface)
-    # uint16 keeps the intermediate product below 255 * 255 from overflowing
-    col = array(color, np.uint16)
+    # uint16 keeps the intermediate product below 255 * 255 from overflowing.
+    # Colors may carry an alpha component, which pixels3d() does not cover.
+    col = array(color, np.uint16)[:3]
     pixel_array[:] = pixel_array * col // 255
     return surface
 

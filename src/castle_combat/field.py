@@ -2,6 +2,10 @@ import pygame
 from pygame.locals import *
 import numpy as np
 from numpy import *
+
+# numpy's star import above shadows these builtins with array reductions,
+# where min(a, b) silently means min(a, axis=b)
+from builtins import min, max
 from random import randint
 from twisted.spread import pb
 from copy import deepcopy
@@ -156,7 +160,7 @@ class Field:
 
     def __init__(self, map):
         self.map = map
-        self.array = zeros(common.field_size, dtype=np.uint8) + Field.EMPTY
+        self.array = zeros(common.field_size, dtype=np.int16) + Field.EMPTY
 
     def init(self):
         self.map.apply()
