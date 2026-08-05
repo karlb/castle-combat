@@ -11,6 +11,9 @@ authors = [{ name = "Karl Bartel", email = "karl42@gmail.com" }]
 # Python versions, so no source build is needed.
 dependencies = ["pygame-ce", "numpy", "twisted"]
 
+[dependency-groups]
+dev = ["pytest"]
+
 [project.urls]
 Homepage = "https://github.com/karlb/castle-combat"
 Issues = "https://github.com/karlb/castle-combat/issues"
