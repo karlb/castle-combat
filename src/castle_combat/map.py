@@ -323,7 +323,7 @@ class ConquerMap(Map):
                 surroundings = self.array[
                     topleft[0] : bottomright[0], topleft[1] : bottomright[1]
                 ]
-                if sometrue(surroundings == Field.CASTLE):
+                if (surroundings == Field.CASTLE).any():
                     return False
                 else:
                     return True

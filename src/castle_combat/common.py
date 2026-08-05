@@ -96,15 +96,9 @@ def colorize(surface, color):
         surface = surface.convert()
 
     pixel_array = pygame.surfarray.pixels3d(surface)
-    # pixel_array = pixel_array * color
-    # pixel_array /= 255
-    # pygame.surfarray.blit_array(surface, pixel_array)
-    col = array(color, np.uint8)
-    for line in pixel_array:
-        for pixel in line:
-            for i in (0, 1, 2):
-                if pixel[i]:
-                    pixel[i] = (int(pixel[i]) * col[i]) / 255
+    # uint16 keeps the intermediate product below 255 * 255 from overflowing
+    col = array(color, np.uint16)
+    pixel_array[:] = pixel_array * col // 255
     return surface
 
 

@@ -49,7 +49,7 @@ class BuildPlayer(BasePlayer):
             surroundings = game.field[
                 topleft[0] : bottomright[0], topleft[1] : bottomright[1]
             ]
-            return sometrue(surroundings == self.player.player_id)
+            return (surroundings == self.player.player_id).any()
 
     def draw_cursor(self):
         if self.block:
