@@ -1,11 +1,7 @@
 import pygame
 from pygame.locals import *
 import numpy as np
-from numpy import *
-
-# numpy's star import above shadows these builtins with array reductions,
-# where min(a, b) silently means min(a, axis=b)
-from builtins import min, max
+from numpy import array, divide, indices
 import os
 
 debug = False

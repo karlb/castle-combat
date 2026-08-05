@@ -1,6 +1,6 @@
 import pygame
 from pygame.locals import *
-from numpy import *
+from numpy import zeros
 from twisted.spread import pb
 
 from . import common

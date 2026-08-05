@@ -1,7 +1,7 @@
 import pygame
 from pygame.locals import *
 import numpy as np
-from numpy import *
+from numpy import array
 from . import common
 from .state import State, IgnoreEvent
 

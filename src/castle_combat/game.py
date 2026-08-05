@@ -1,10 +1,6 @@
 import pygame
 from pygame.locals import *
-from numpy import *
-
-# numpy's star import above shadows these builtins with array reductions,
-# where min(a, b) silently means min(a, axis=b)
-from builtins import min, max
+from numpy import add, multiply
 from twisted.spread import pb
 
 from . import common

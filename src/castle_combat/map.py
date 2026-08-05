@@ -1,6 +1,6 @@
 from random import randint
 import numpy as np
-from numpy import *
+from numpy import add, array, subtract, where, zeros
 from twisted.spread import pb
 from twisted.internet import reactor
 

@@ -1,11 +1,7 @@
 import pygame
 from pygame.locals import *
 import numpy as np
-from numpy import *
-
-# numpy's star import above shadows these builtins with array reductions,
-# where min(a, b) silently means min(a, axis=b)
-from builtins import min, max
+from numpy import add, multiply, nonzero, putmask, ravel, repeat, subtract, where, zeros
 from random import randint
 from twisted.spread import pb
 from copy import deepcopy
@@ -347,7 +343,7 @@ class Field:
                 ]
                 == 1
             )
-            if not any(nonzero(ravel(unsecured_surroundings))):
+            if not np.any(nonzero(ravel(unsecured_surroundings))):
                 restart_at = tuple(subtract(restart_at, 2))
                 player.secured[restart_at] = True
                 # common.backbuffer.blit(player.ground_pic, [restart_at[i] * common.block_size for i in (0,1)])

@@ -1,6 +1,6 @@
 import pygame
 from pygame.locals import *
-from numpy import *
+from numpy import add, multiply
 
 from . import common
 from .game import game
