@@ -1,13 +1,13 @@
 from twisted.spread import pb
 from twisted.cred.portal import IRealm
 from twisted.internet import reactor, defer
-from widget import WidgetState
-import common
+from .widget import WidgetState
+from . import common
 
 
 class WaitForPlayersState(WidgetState):
     def __init__(self):
-        from widget import Label
+        from .widget import Label
 
         WidgetState.__init__(self)
         Label("Waiting for Players to join", (None, None))
@@ -57,7 +57,7 @@ class ClientAvatar(pb.Avatar):
 
     def perspective_get_server_info(self):
         game = self.server.game
-        from player import PlayerCacheable
+        from .player import PlayerCacheable
 
         info = {
             "players": game.players,
@@ -100,10 +100,10 @@ class Server:
     clients = []
 
     def __init__(self, map, total_players):
-        import player
+        from . import player
 
         players = [player.PlayerCacheable(i) for i in range(total_players)]
-        import game
+        from . import game
 
         self.game = game.Game(players=players, server=self)
         map.setup()
@@ -167,7 +167,7 @@ class Server:
             player.local = True
 
         for i in range(ai_players):
-            import ai
+            from . import ai
 
             (player_id, avatar) = self.claim_player_as_local()
             self.game.players[player_id].local = True

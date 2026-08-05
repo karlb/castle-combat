@@ -1,2 +1,6 @@
 *.pyc
+__pycache__/
 venv/
+.venv/
+/dist/*.tar.gz
+/dist/*.whl

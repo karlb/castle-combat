@@ -97,11 +97,11 @@ class MainState(State):
         reactor.stop()
 
     def keepMusicRunning(self, event):
-        import sound
+        from . import sound
 
         sound.play_music()
 
-    from common import MUSICEVENT
+    from .common import MUSICEVENT
 
     persistent_events = {
         KEYDOWN: handle_keypress,

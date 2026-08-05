@@ -10,8 +10,7 @@ screen_updates = []
 screen_undraws = []
 block_size = 20
 field_size = array((40, 30))
-# data_path = "../data"
-data_path = "data"
+data_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
 
 ###### Exceptions ######
 
@@ -217,7 +216,7 @@ class Signal:
 def init():
     global screen
     flags = 0
-    import config
+    from . import config
 
     if config.conf.fullscreen:
         flags |= pygame.FULLSCREEN
@@ -230,13 +229,13 @@ def init():
 
 
 def info(string):
-    from widget import WidgetState
+    from .widget import WidgetState
 
     class InfoState(WidgetState):
         pass
 
     state = InfoState()
-    from widget import Label
+    from .widget import Label
 
     Label(string, (None, None)).draw()
     update()

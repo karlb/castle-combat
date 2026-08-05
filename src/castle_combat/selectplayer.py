@@ -2,10 +2,10 @@ import pygame
 from pygame.locals import *
 from numpy import *
 
-import common
-from game import game
-from field import Castle
-from player import BasePlayer
+from . import common
+from .game import game
+from .field import Castle
+from .player import BasePlayer
 
 
 class SelectPlayer(BasePlayer):
@@ -84,7 +84,7 @@ class SelectPlayer(BasePlayer):
         pass
 
 
-from network import ServerObject, ClientObject, networkify
+from .network import ServerObject, ClientObject, networkify
 
 
 class SelectPlayerServer(ServerObject, SelectPlayer):

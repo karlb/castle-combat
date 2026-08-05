@@ -3,7 +3,7 @@ from pygame.locals import *
 import os
 import random
 
-import common
+from . import common
 
 music_files = ("farmor8.xm", "fdream.xm")
 next_file = random.randint(0, len(music_files) - 1)
@@ -55,7 +55,7 @@ def play_music():
     pygame.mixer.music.set_endevent(common.MUSICEVENT)
 
 
-import config
+from . import config
 
 if pygame.mixer.get_init() and config.conf.sound:
     sound_on()

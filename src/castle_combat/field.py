@@ -6,8 +6,8 @@ from random import randint
 from twisted.spread import pb
 from copy import deepcopy
 
-from game import game
-import common
+from .game import game
+from . import common
 
 
 class Castle(pb.Copyable, pb.RemoteCopy):

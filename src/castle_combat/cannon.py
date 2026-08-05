@@ -3,9 +3,9 @@ from pygame.locals import *
 from random import randint
 import math
 
-import common
-from game import game
-import sound
+from . import common
+from .game import game
+from . import sound
 
 
 class Shot:
@@ -79,7 +79,7 @@ class Cannon(common.AutoReloader):
             self.size = 3
             self.hitpoints = 18
 
-        import field
+        from . import field
 
         for x in range(self.size):
             for y in range(self.size):

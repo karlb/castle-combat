@@ -1,20 +1,20 @@
 from twisted.internet import reactor
 from twisted.spread import pb
 from twisted.cred.credentials import Anonymous, UsernamePassword
-from widget import WidgetState
+from .widget import WidgetState
 
 # import to allow unjellying
-import player
-import selectplayer
-import placeplayer
-import buildplayer
-import battleplayer
-import map
+from . import player
+from . import selectplayer
+from . import placeplayer
+from . import buildplayer
+from . import battleplayer
+from . import map
 
 
 class WaitForSeverState(WidgetState):
     def __init__(self):
-        from widget import Label
+        from .widget import Label
 
         WidgetState.__init__(self)
         Label("Connecting to server", (None, None))
@@ -71,7 +71,7 @@ class Client:
         print("login failure:", error)
 
     def get_server_info_callback(self, info):
-        import game
+        from . import game
 
         # self.game = game.Game(RiverMap2p, info['number_of_players'])
         self.game = game.Game(info["players"])

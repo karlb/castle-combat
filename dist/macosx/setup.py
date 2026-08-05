@@ -20,8 +20,8 @@ plist = dict(
 )
 
 setup(
-    data_files=['English.lproj', '../../data'],
+    data_files=['English.lproj', '../../src/castle_combat/data'],
     app=[
-        dict(script="../../src/castle-combat_bootstrap.py", plist=plist),
+        dict(script="castle-combat_bootstrap.py", plist=plist),
     ],
 )

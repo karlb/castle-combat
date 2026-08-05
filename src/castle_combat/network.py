@@ -1,6 +1,6 @@
 from twisted.spread import pb
 from twisted.internet import defer
-import common
+from . import common
 
 
 class ServerObject(pb.Cacheable, pb.Referenceable):

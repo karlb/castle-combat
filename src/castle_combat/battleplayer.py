@@ -2,11 +2,11 @@ import pygame
 from pygame.locals import *
 from numpy import *
 
-import common
+from . import common
 import random
-from cannon import Shot
-from player import BasePlayer
-from game import game
+from .cannon import Shot
+from .player import BasePlayer
+from .game import game
 
 
 class BattlePlayer(BasePlayer):
@@ -98,7 +98,7 @@ class BattlePlayer(BasePlayer):
             return None
 
 
-from network import ServerObject, ClientObject, networkify
+from .network import ServerObject, ClientObject, networkify
 
 
 class BattlePlayerServer(ServerObject, BattlePlayer):

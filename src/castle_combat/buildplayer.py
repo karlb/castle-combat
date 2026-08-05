@@ -1,13 +1,13 @@
 import pygame
 from pygame.locals import *
 from numpy import *
-import common
+from . import common
 import random
 from copy import copy
 
-from game import game
-from field import Field, Grunt
-from player import BasePlayer
+from .game import game
+from .field import Field, Grunt
+from .player import BasePlayer
 
 
 class BuildPlayer(BasePlayer):
@@ -172,7 +172,7 @@ class BuildPlayer(BasePlayer):
         self.pos = self.bounded_pos()
 
 
-from network import ServerObject, ClientObject, networkify
+from .network import ServerObject, ClientObject, networkify
 
 
 class BuildPlayerServer(ServerObject, BuildPlayer):

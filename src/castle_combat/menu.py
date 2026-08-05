@@ -1,10 +1,10 @@
 import pygame
 from pygame.locals import *
 
-from widget import *
-import common
-import sound
-from config import conf, PlayerConfig
+from .widget import *
+from . import common
+from . import sound
+from .config import conf, PlayerConfig
 
 menu_back = common.load_image("back.png")
 
@@ -19,7 +19,7 @@ class NewGameState(WidgetState):
         WidgetState.__init__(self)
 
         def start_game(total_players, local_players, ai_players):
-            import server
+            from . import server
 
             options = dict(difficulty=self.difficulty.value.lower().replace(" ", "_"))
             ser = server.Server(self.selected_map(options), total_players)
@@ -30,7 +30,7 @@ class NewGameState(WidgetState):
                 self.local_players.value, self.total_players.value
             )
             self.local_players.choices = list(range(self.total_players.value, 0, -1))
-            from map import maps
+            from .map import maps
 
             self.map.choices = [
                 m.title for m in maps if self.total_players.value in m.allowed_players
@@ -38,7 +38,7 @@ class NewGameState(WidgetState):
             on_map_change()
 
         def on_map_change():
-            from map import maps, GruntAssault
+            from .map import maps, GruntAssault
 
             self.selected_map = [
                 m
@@ -110,7 +110,7 @@ class JoinGameState(WidgetState):
         WidgetState.__init__(self)
 
         def join(server, local_players):
-            import client
+            from . import client
 
             cl = client.Client(server)
             cl.run(local_players)
@@ -206,9 +206,9 @@ class MenuState(WidgetState):
 
         def help():
             from webbrowser import open
-            from os.path import abspath
+            from os.path import abspath, join
 
-            file = "file://" + abspath("data/doc/rules.html")
+            file = "file://" + abspath(join(common.data_path, "doc", "rules.html"))
             print(file)
             open(file, new=True)
 

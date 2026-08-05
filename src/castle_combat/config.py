@@ -46,7 +46,7 @@ class PlayerConfig:
 
     def assign():
         i = 0
-        from game import game
+        from .game import game
 
         for player in game.players:
             if player.local:
@@ -101,7 +101,9 @@ def load():
         except AttributeError:
             print("Updating config file from alpha version")
         PlayerConfig.instances = conf.player_configs
-    except IOError:
+    except Exception:
+        # Missing, unreadable or outdated (e.g. written by a pre-packaging
+        # version, which pickled different module paths) config file.
         print("Could not load user's config file, loading defaults.")
         for i in range(4):
             PlayerConfig(i)

@@ -2,8 +2,8 @@ import pygame
 from pygame.locals import *
 import numpy as np
 from numpy import *
-import common
-from state import State, IgnoreEvent
+from . import common
+from .state import State, IgnoreEvent
 
 
 class WidgetState(State):
@@ -227,7 +227,7 @@ class LineEdit(Widget):
             self.widget.update_text(self.show_cursor)
 
             # get widgets from previous State
-            from state import State
+            from .state import State
 
             self.widgets = State.stack[-2].widgets
 

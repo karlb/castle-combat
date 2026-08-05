@@ -2,9 +2,9 @@ import pygame
 from pygame.locals import *
 from numpy import *
 
-import common
-from game import game
-from state import State, IgnoreEvent
+from . import common
+from .game import game
+from .state import State, IgnoreEvent
 
 
 class GameState(State):
@@ -15,7 +15,7 @@ class GameState(State):
                 raise IgnoreEvent(d)
             if event.key == K_EQUALS:
                 try:
-                    import cannon
+                    from . import cannon
 
                     reload(cannon)
                     print("reload successful")
@@ -149,7 +149,7 @@ class BuildPhase(Phase):
 
     def cleanup(self):
         def clean_walls():
-            from field import Field
+            from .field import Field
 
             for player in game.players:
                 player_id = player.player_id
@@ -182,7 +182,7 @@ class BuildPhase(Phase):
         pygame.time.set_timer(USEREVENT, 0)
 
         # eleminate players
-        from field import Castle
+        from .field import Castle
 
         for player in game.players:
             if not [
@@ -223,20 +223,20 @@ class BattlePhase(Phase):
 
     def __init__(self):
         def battle_actions(passed_milliseconds):
-            from cannon import Shot
+            from .cannon import Shot
 
             for can in game.cannons:
                 can.blit()
             for shot in game.shots:
                 shot.handle(passed_milliseconds)
                 shot.draw()
-            from field import Grunt
+            from .field import Grunt
 
             for grunt in Grunt.instances:
                 grunt.handle(passed_milliseconds)
 
         def remove_garbage():
-            from field import Field
+            from .field import Field
 
             game.field.array += logical_and(
                 where(game.field.array >= Field.GARBAGE_NEW, 1, 0),
@@ -253,7 +253,7 @@ class BattlePhase(Phase):
         game.field.draw_backbuffer(draw_cannons=False)
 
     def phase_end(self):
-        from cannon import Shot
+        from .cannon import Shot
 
         return self.time_left <= 0 and not game.shots
 

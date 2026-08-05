@@ -3,8 +3,8 @@ from pygame.locals import *
 from numpy import *
 from twisted.spread import pb
 
-import common
-from common import Signal
+from . import common
+from .common import Signal
 
 
 class Game(pb.Referenceable, common.Borg):
@@ -27,7 +27,7 @@ class Game(pb.Referenceable, common.Borg):
         # empty instance lists
         self.cannons = []
         self.shots = []
-        from field import Grunt
+        from .field import Grunt
 
         Grunt.instances = []
 
@@ -40,7 +40,7 @@ class Game(pb.Referenceable, common.Borg):
         self.unpause_signal = Signal()
 
     def set_map(self, map):
-        import field
+        from . import field
 
         self.field = field.Field(map)
 
@@ -66,7 +66,7 @@ class Game(pb.Referenceable, common.Borg):
         self.unpause_signal.emit()
 
     def remote_pause(self):
-        from widget import Button, WidgetState
+        from .widget import Button, WidgetState
 
         class PauseState(WidgetState):
             def __init__(self):
@@ -104,10 +104,10 @@ class Game(pb.Referenceable, common.Borg):
         common.info("Starting Game")
         self.field.init()
         self.field.draw_backbuffer()
-        from config import PlayerConfig
+        from .config import PlayerConfig
 
         PlayerConfig.assign()
-        from gamephases import AnnouncePhase, SelectPhase, GameState
+        from .gamephases import AnnouncePhase, SelectPhase, GameState
 
         self.game_state = GameState()
         self.phase = AnnouncePhase(SelectPhase)
@@ -119,7 +119,7 @@ class Game(pb.Referenceable, common.Borg):
         getattr(self, self.phase.phase_name + "_phase_finished").emit()  # fire signal
 
     def remote_new_house(self, pos):
-        from field import Field
+        from .field import Field
 
         if self.field[pos] == Field.EMPTY:
             for pl in self.players:
@@ -133,24 +133,24 @@ class Game(pb.Referenceable, common.Borg):
             raise common.ActionNotPossible
 
     def remote_create_grunt(self, pos):
-        from field import Grunt
+        from .field import Grunt
 
         Grunt(pos)
 
     def remote_move_grunt(self, id, new_pos):
-        from field import Grunt
+        from .field import Grunt
 
         grunt = [g for g in Grunt.instances if g.id == id][0]
         grunt.move(new_pos)
 
     def remote_rotate_grunt(self, id, new_dir):
-        from field import Grunt
+        from .field import Grunt
 
         grunt = [g for g in Grunt.instances if g.id == id][0]
         grunt.rotate(new_dir)
 
     def remote_hit(self, pos, cannon_id=-1):
-        from field import Field, Grunt
+        from .field import Field, Grunt
 
         if cannon_id >= 0:
             cannon = [can for can in game.cannons if can.id == cannon_id][0]

@@ -1,5 +1,5 @@
 from numpy import *
-from game import game
+from .game import game
 
 
 class BaseAI:

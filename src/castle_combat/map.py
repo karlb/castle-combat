@@ -4,9 +4,9 @@ from numpy import *
 from twisted.spread import pb
 from twisted.internet import reactor
 
-import common
-from game import game
-from field import Field, Grunt, Castle
+from . import common
+from .game import game
+from .field import Field, Grunt, Castle
 
 
 class Map(pb.Copyable, pb.RemoteCopy):
@@ -80,7 +80,7 @@ class Map(pb.Copyable, pb.RemoteCopy):
                 string = "%s wins!" % alive[0].name
             print("game end")
 
-            from widget import Button, WidgetState
+            from .widget import Button, WidgetState
 
             class EndState(WidgetState):
                 def __init__(self):
@@ -91,7 +91,7 @@ class Map(pb.Copyable, pb.RemoteCopy):
                 def quit(self):
                     WidgetState.quit(self)
                     game.game_state.quit()
-                    from state import IgnoreEvent
+                    from .state import IgnoreEvent
 
                     raise IgnoreEvent
 
@@ -154,7 +154,7 @@ class GruntAssault(Map):
 
     def add_end_test(self):
         def win_test():
-            from widget import Button, WidgetState
+            from .widget import Button, WidgetState
 
             class EndState(WidgetState):
                 def __init__(self):
@@ -165,17 +165,17 @@ class GruntAssault(Map):
                 def quit(self):
                     WidgetState.quit(self)
                     game.game_state.quit()
-                    from state import IgnoreEvent
+                    from .state import IgnoreEvent
 
                     raise IgnoreEvent
 
-            from field import Grunt
+            from .field import Grunt
 
             if not Grunt.instances:
                 EndState()
 
         def lost_test():
-            from widget import Button, WidgetState
+            from .widget import Button, WidgetState
 
             class EndState(WidgetState):
                 def __init__(self):
@@ -186,7 +186,7 @@ class GruntAssault(Map):
                 def quit(self):
                     WidgetState.quit(self)
                     game.game_state.quit()
-                    from state import IgnoreEvent
+                    from .state import IgnoreEvent
 
                     raise IgnoreEvent
 

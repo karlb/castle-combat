@@ -8,15 +8,26 @@ The game can be played by two people at the same computer or with up to 4 player
 
 ## Installation
 
-It is recommended to install castle combat into a python virtual environment. Example for linux users using the bash shell:
+Install with [uv](https://docs.astral.sh/uv/):
+
+```sh
+uv tool install git+https://github.com/karlb/castle-combat.git
+```
+
+Then start the game with `castle-combat`.
+
+To run it once without installing:
+
+```sh
+uvx --from git+https://github.com/karlb/castle-combat.git castle-combat
+```
+
+## Development
 
 ```sh
 git clone git@github.com:karlb/castle-combat.git
-cd  castle-combat
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-./castle-combat.py
+cd castle-combat
+uv run castle-combat
 ```
 
 ## Support

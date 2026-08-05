@@ -3,9 +3,9 @@ from pygame.locals import *
 from numpy import *
 from twisted.spread import pb
 
-import common
+from . import common
 import random
-from game import game
+from .game import game
 
 
 class BasePlayer:
@@ -98,10 +98,10 @@ class Player:
 
         self.set_player_id(player_id)
 
-        import buildplayer
-        import placeplayer
-        import battleplayer
-        import selectplayer
+        from . import buildplayer
+        from . import placeplayer
+        from . import battleplayer
+        from . import selectplayer
 
         self.build_player = buildplayer.BuildPlayerServer(self)
         self.place_player = placeplayer.PlacePlayerServer(self)
@@ -199,10 +199,10 @@ class PlayerRemoteCache(Player, pb.RemoteCache):
         self.secured = zeros(common.field_size)
         self.set_player_id(self._player_id)
 
-        import buildplayer
-        import placeplayer
-        import battleplayer
-        import selectplayer
+        from . import buildplayer
+        from . import placeplayer
+        from . import battleplayer
+        from . import selectplayer
 
         # self.build_player = buildplayer.BuildPlayer(self)
         # self.place_player = placeplayer.PlacePlayer(self)

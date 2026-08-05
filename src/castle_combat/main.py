@@ -1,6 +1,6 @@
 import pygame
 from pygame.locals import *
-import common
+from . import common
 
 
 def init():
@@ -31,16 +31,16 @@ def main():
     # 	(is_server) = get_opts()
     # 	import sys
     # 	print sys.argv
-    import config
+    from . import config
 
     config.load()
     init()
 
-    from state import MainState, runStateLoop
+    from .state import MainState, runStateLoop
 
     MainState()
 
-    from menu import MenuState
+    from .menu import MenuState
 
     MenuState()
 

@@ -2,10 +2,10 @@ import pygame
 from pygame.locals import *
 from numpy import *
 
-import common
-from game import game
-from player import BasePlayer
-from field import Castle, Field
+from . import common
+from .game import game
+from .player import BasePlayer
+from .field import Castle, Field
 
 
 class PlacePlayer(BasePlayer):
@@ -34,7 +34,7 @@ class PlacePlayer(BasePlayer):
     def draw_cursor(self):
         if not self.new_cannons:
             return
-        from cannon import Cannon
+        from .cannon import Cannon
 
         common.blit(
             Cannon.cannon_pic[self.selected_type][0],
@@ -54,7 +54,7 @@ class PlacePlayer(BasePlayer):
         common.blit(surface, text_pos)
 
     def place_cannon(self):
-        from cannon import Cannon
+        from .cannon import Cannon
 
         price = Cannon.price[self.selected_type]
         if self.new_cannons < price:
@@ -68,7 +68,7 @@ class PlacePlayer(BasePlayer):
     def change_type(self):
         self.selected_type += 1
         self.selected_type %= 2
-        from cannon import Cannon
+        from .cannon import Cannon
 
         if self.new_cannons < Cannon.price[self.selected_type]:
             self.selected_type = 0
@@ -94,7 +94,7 @@ class PlacePlayer(BasePlayer):
                 self.pos[i] = newpos
 
 
-from network import ServerObject, ClientObject, networkify
+from .network import ServerObject, ClientObject, networkify
 
 
 class PlacePlayerServer(ServerObject, PlacePlayer):
