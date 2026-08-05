@@ -83,7 +83,9 @@ class MainState(State):
 
     def handle_keypress(self, event):
         if event.key == K_RETURN and event.mod == KMOD_LALT:
-            pygame.display.toggle_fullscreen()
+            from . import common
+
+            common.toggle_fullscreen()
         if event.key == K_q and event.mod == KMOD_LMETA:
             reactor.stop()
 

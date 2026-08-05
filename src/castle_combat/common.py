@@ -8,6 +8,7 @@ debug = False
 
 screen_updates = []
 screen_undraws = []
+backbuffer = None
 block_size = 20
 field_size = array((40, 30))
 data_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
@@ -208,15 +209,57 @@ class Signal:
                 callback(*args, **kwargs)
 
 
-def init():
-    global screen
-    flags = 0
+def display_flags():
     from . import config
 
+    # SCALED draws the game at its fixed 800x600 layout and lets SDL scale that
+    # up to the display. Without it, fullscreen switches the screen to a 800x600
+    # video mode, or leaves the game sitting in a corner of a larger surface
+    # with all edge-anchored widgets placed off the background.
+    flags = pygame.SCALED
     if config.conf.fullscreen:
         flags |= pygame.FULLSCREEN
-    screen = pygame.display.set_mode((800, 600), flags)
-    global backbuffer
+    return flags
+
+
+def set_fullscreen(fullscreen):
+    """Switch between fullscreen and windowed mode without restarting
+
+    pygame.display.toggle_fullscreen() is not supported everywhere, so go
+    through set_mode(), which is the same call that set up the display.
+    """
+    global screen
+    from . import config
+
+    fullscreen = bool(fullscreen)
+    if fullscreen == bool(config.conf.fullscreen):
+        return
+    config.conf.fullscreen = fullscreen
+    screen = pygame.display.set_mode((800, 600), display_flags())
+    redraw()
+
+
+def toggle_fullscreen():
+    from . import config
+
+    set_fullscreen(not config.conf.fullscreen)
+
+
+def redraw():
+    """Repaint the whole screen, e.g. after the display mode changed"""
+    global screen_updates
+    global screen_undraws
+    if backbuffer is None:
+        return
+    screen.blit(backbuffer, (0, 0))
+    pygame.display.update()
+    screen_updates = []
+    screen_undraws = []
+
+
+def init():
+    global screen
+    screen = pygame.display.set_mode((800, 600), display_flags())
     global font
     font = pygame.font.Font(os.path.join(data_path, "DefaultFancy.ttf"), 34)
     global small_font

@@ -170,6 +170,9 @@ class ConfigState(WidgetState):
             else:
                 sound.sound_off()
 
+        def fullscreen_change():
+            common.set_fullscreen(self.fullscreen.value == "On")
+
         bool_to_on_off = {True: "On", False: "Off"}
         self.sound = SpinBox(
             "Sound",
@@ -183,6 +186,7 @@ class ConfigState(WidgetState):
             (485, -20),
             ("On", "Off"),
             default=bool_to_on_off[conf.fullscreen],
+            on_change=fullscreen_change,
         )
 
     def quit(self):
@@ -195,7 +199,8 @@ class ConfigState(WidgetState):
             keys.button[0] = self.button[i][0][0]
             keys.button[1] = self.button[i][1][0]
         is_on = {"On": True, "Off": False}
-        conf.fullscreen = is_on[self.fullscreen.value]
+        # keep the display in sync in case it was toggled with alt+enter
+        common.set_fullscreen(is_on[self.fullscreen.value])
         conf.sound = is_on[self.sound.value]
         WidgetState.quit(self)
 
