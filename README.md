@@ -22,6 +22,19 @@ To run it once without installing:
 uvx --from git+https://github.com/karlb/castle-combat.git castle-combat
 ```
 
+If you would rather use [pipx](https://pipx.pypa.io/), it can install from the
+repository too, as long as the Python it runs on is 3.10 or newer:
+
+```sh
+pipx install git+https://github.com/karlb/castle-combat.git
+```
+
+and to run it once:
+
+```sh
+pipx run --spec git+https://github.com/karlb/castle-combat.git castle-combat
+```
+
 ## Development
 
 ```sh
