@@ -1,0 +1,35 @@
+#!/bin/sh
+# Reject a commit whose staged Python files do not pass ruff.
+#
+# Enable with:
+#   git config core.hooksPath .githooks
+#
+# The staged content is piped to ruff rather than letting it read the working
+# tree, so a partially staged file is judged by what is actually being
+# committed, and unstaged work in progress cannot block the commit.
+
+if [ -x .venv/bin/ruff ]; then
+	ruff() { .venv/bin/ruff "$@"; }
+else
+	ruff() { uv run --quiet ruff "$@"; }
+fi
+
+status=0
+while IFS= read -r file; do
+	[ -n "$file" ] || continue
+	# --quiet prints diagnostics and nothing else; --diff is used instead of
+	# --check because --check says nothing at all when reading stdin.
+	git show ":$file" | ruff check --quiet --stdin-filename "$file" - || status=1
+	git show ":$file" | ruff format --diff --stdin-filename "$file" - || status=1
+done <<EOF
+$(git diff --cached --name-only --diff-filter=ACM -- '*.py')
+EOF
+
+if [ "$status" -ne 0 ]; then
+	echo
+	echo "ruff rejected the staged changes. Fix them with:"
+	echo "    uv run ruff check --fix && uv run ruff format"
+	echo "or bypass this hook with: git commit --no-verify"
+fi
+
+exit $status
