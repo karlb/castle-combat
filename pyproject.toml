@@ -18,7 +18,7 @@ authors = [{ name = "Karl Bartel", email = "karl42@gmail.com" }]
 dependencies = ["pygame-ce>=2.2", "numpy>=1.26", "twisted>=22.10"]
 
 [dependency-groups]
-dev = ["pytest"]
+dev = ["pytest", "ruff"]
 
 [project.urls]
 Homepage = "https://github.com/karlb/castle-combat"
@@ -33,3 +33,15 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/castle_combat"]
+
+[tool.ruff.lint]
+# pyflakes plus the pycodestyle rules that catch real problems rather than
+# layout, which `ruff format` handles. Selected explicitly rather than left to
+# ruff's default, because that default changes between ruff releases: 0.16
+# dropped E711/E712/E713 from it and added a dozen other groups. Pinning the
+# set keeps an upgrade from silently changing what counts as a warning.
+select = ["E4", "E7", "E9", "F"]
+# The four *player modules define their networked subclasses below the
+# implementation class they wrap, and sound.py imports config at the bottom to
+# break an import cycle. Neither is accidental.
+ignore = ["E402"]
