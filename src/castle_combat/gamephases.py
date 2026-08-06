@@ -165,6 +165,9 @@ class BuildPhase(Phase):
             game.field.draw_backbuffer()
 
         clean_walls()
+        # the walls decide who owns which cannon, so this follows clean_walls
+        for can in game.cannons:
+            can.update_owner()
         game.field.add_houses(5)
         pygame.time.set_timer(pygame.USEREVENT, 0)
 

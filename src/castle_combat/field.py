@@ -233,7 +233,7 @@ class Field:
             common.backbuffer.blit(self.obstacle_pic[self[pos]], screen_pos)
         elif self[pos] == self.CANNON:
             for can in game.cannons:
-                if can.pos == pos and (draw_cannons or can.hitpoints <= 0):
+                if can.pos == pos and (draw_cannons or not can.is_active):
                     can.backbuffer_blit()
                     break
         elif self[pos] == self.CASTLE:

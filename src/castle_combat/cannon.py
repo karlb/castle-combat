@@ -90,6 +90,32 @@ class Cannon:
 
         game.cannons.append(self)
 
+    def update_owner(self):
+        """Ownership follows the walls rather than who paid for the cannon
+
+        A cannon whose ground is no longer enclosed goes idle until somebody
+        walls it in again, and that somebody may well be the enemy.
+        """
+        owners = [
+            player
+            for player in game.players
+            if all(
+                player.secured[self.pos[0] + x][self.pos[1] + y]
+                for x in range(self.size)
+                for y in range(self.size)
+            )
+        ]
+        if self.player in owners:
+            # walling around an enemy's wall secures the same ground for both,
+            # so whoever holds the cannon keeps it
+            return
+        self.player = owners[0] if owners else None
+
+    @property
+    def is_active(self):
+        """Idle and wrecked cannons don't aim or shoot, they just stand around"""
+        return self.hitpoints > 0 and self.player is not None
+
     def hit(self):
         self.hitpoints -= 1
         if self.hitpoints == 0:
@@ -103,7 +129,7 @@ class Cannon:
         )
 
     def blit(self):
-        if self.hitpoints <= 0:
+        if not self.is_active:
             return
         cannon_center = [
             (self.pos[i] + (2.0 + self.type) / 2) * common.block_size for i in range(2)
