@@ -38,7 +38,9 @@ def sound_off():
         return
 
     # effects
+    global cannon
     cannon = DummySound()
+    global wall_hit
     wall_hit = DummySound()
 
     # music
