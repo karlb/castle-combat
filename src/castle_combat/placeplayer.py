@@ -1,11 +1,10 @@
-import pygame
 from pygame.locals import *
 from numpy import add, multiply
 
 from . import common
 from .game import game
 from .player import BasePlayer
-from .field import Castle, Field
+from .field import Field
 
 
 class PlacePlayer(BasePlayer):

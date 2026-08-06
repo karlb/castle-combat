@@ -56,7 +56,6 @@ class ClientAvatar(pb.Avatar):
 
     def perspective_get_server_info(self):
         game = self.server.game
-        from .player import PlayerCacheable
 
         info = {
             "players": game.players,
@@ -110,10 +109,7 @@ class Server:
         self.ai_players = []
 
         from twisted.cred.portal import Portal
-        from twisted.cred.checkers import (
-            AllowAnonymousAccess,
-            InMemoryUsernamePasswordDatabaseDontUse,
-        )
+        from twisted.cred.checkers import InMemoryUsernamePasswordDatabaseDontUse
 
         portal = Portal(RequestClientRealm(self))
         checker = InMemoryUsernamePasswordDatabaseDontUse()

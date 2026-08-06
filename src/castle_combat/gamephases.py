@@ -171,7 +171,6 @@ class BuildPhase(Phase):
         pygame.time.set_timer(USEREVENT, 0)
 
         # eleminate players
-        from .field import Castle
 
         for player in game.players:
             if not [
@@ -212,7 +211,6 @@ class BattlePhase(Phase):
 
     def __init__(self):
         def battle_actions(passed_milliseconds):
-            from .cannon import Shot
 
             for can in game.cannons:
                 can.blit()
@@ -242,7 +240,6 @@ class BattlePhase(Phase):
         game.field.draw_backbuffer(draw_cannons=False)
 
     def phase_end(self):
-        from .cannon import Shot
 
         return self.time_left <= 0 and not game.shots
 

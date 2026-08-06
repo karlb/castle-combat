@@ -1,4 +1,3 @@
-import pygame
 from pygame.locals import *
 from numpy import add, multiply
 from twisted.spread import pb

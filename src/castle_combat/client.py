@@ -1,6 +1,6 @@
 from twisted.internet import reactor
 from twisted.spread import pb
-from twisted.cred.credentials import Anonymous, UsernamePassword
+from twisted.cred.credentials import UsernamePassword
 from .widget import WidgetState
 
 # import to allow unjellying

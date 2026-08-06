@@ -130,7 +130,6 @@ def runStateLoop():
             return
         reactor.callLater(0.01, stateLoop)
 
-    from twisted.internet.task import LoopingCall
 
     reactor.callWhenRunning(stateLoop)
     reactor.run()

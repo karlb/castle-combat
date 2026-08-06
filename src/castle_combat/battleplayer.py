@@ -3,7 +3,6 @@ from pygame.locals import *
 from numpy import multiply
 
 from . import common
-import random
 from .cannon import Shot
 from .player import BasePlayer
 from .game import game
