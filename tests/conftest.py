@@ -22,7 +22,8 @@ FRAME_MS = 200
 # before any fixture runs, so this cannot wait for one.
 #
 # config.load() is deliberately not used: it reads, and on the way out writes,
-# the player's real ~/.castle-combat.config.
+# the player's real config file. test_config.py points XDG_CONFIG_HOME
+# somewhere disposable to exercise it.
 config.conf = config.Config()
 config.PlayerConfig.instances = []
 for _player_id in range(4):

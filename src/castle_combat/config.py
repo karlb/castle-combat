@@ -1,6 +1,22 @@
+import json
+import os
+from pathlib import Path
+
 from pygame.locals import *
 
 conf = None
+
+CONFIG_VERSION = 2
+
+# the Config attributes that are worth remembering between runs
+SETTINGS = (
+    "server",
+    "total_players",
+    "local_players",
+    "ai_players",
+    "fullscreen",
+    "sound",
+)
 
 
 class Keys:
@@ -67,42 +83,60 @@ class Config:
     sound = False
 
 
-def open_config_file(mode):
-    import os
+def config_file():
+    """Where the settings live, per the XDG base directory spec"""
+    base = os.environ.get("XDG_CONFIG_HOME")
+    directory = Path(base) if base else Path.home() / ".config"
+    return directory / "castle-combat" / "config.json"
 
-    if os.name == "posix":
-        file = open(os.path.join(os.getenv("HOME"), ".castle-combat.config"), mode)
-    else:
-        file = open("castle-combat.config", mode)
-    return file
+
+def load_defaults():
+    global conf
+    PlayerConfig.instances = []
+    for player_id in range(4):
+        PlayerConfig(player_id)
+    conf = Config()
 
 
 def save():
-    conf.player_configs = PlayerConfig.instances
-    conf.version = 1
-    file = open_config_file("wb")
-    import pickle
-
-    pickle.dump(conf, file)
+    data = {
+        "version": CONFIG_VERSION,
+        "settings": {name: getattr(conf, name) for name in SETTINGS},
+        "keys": [
+            {
+                "up": player_config.keys.up,
+                "down": player_config.keys.down,
+                "left": player_config.keys.left,
+                "right": player_config.keys.right,
+                "button": list(player_config.keys.button),
+            }
+            for player_config in PlayerConfig.instances
+        ],
+    }
+    path = config_file()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(data, indent=2))
 
 
 def load():
-    global conf
+    load_defaults()
     try:
-        file = open_config_file("rb")
-        import pickle
-
-        conf = pickle.load(file)
-        try:
-            if conf.version != 1:
-                raise "Unknown config file version."
-        except AttributeError:
-            print("Updating config file from alpha version")
-        PlayerConfig.instances = conf.player_configs
-    except Exception:
-        # Missing, unreadable or outdated (e.g. written by a pre-packaging
-        # version, which pickled different module paths) config file.
-        print("Could not load user's config file, loading defaults.")
-        for i in range(4):
-            PlayerConfig(i)
-        conf = Config()
+        data = json.loads(config_file().read_text())
+        if data["version"] != CONFIG_VERSION:
+            raise ValueError("unknown version %r" % (data["version"],))
+        for name, value in data["settings"].items():
+            # ignore settings this version has dropped
+            if name in SETTINGS:
+                setattr(conf, name, value)
+        for player_config, keys in zip(PlayerConfig.instances, data["keys"]):
+            player_config.keys.up = keys["up"]
+            player_config.keys.down = keys["down"]
+            player_config.keys.left = keys["left"]
+            player_config.keys.right = keys["right"]
+            # a list, because the options menu assigns to its elements
+            player_config.keys.button = list(keys["button"])
+    except FileNotFoundError:
+        pass
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        print("Ignoring unusable config file %s: %s" % (config_file(), error))
+        load_defaults()
