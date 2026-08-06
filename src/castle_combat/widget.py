@@ -1,5 +1,4 @@
 import pygame
-from pygame.locals import *
 import numpy as np
 from numpy import array
 from . import common
@@ -17,16 +16,16 @@ class WidgetState(State):
         common.update()
 
     def pass_to_widgets(self, event):
-        if event.type == KEYDOWN and event.key == K_ESCAPE:
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             self.quit()
             raise IgnoreEvent
         for w in self.widgets:
             w.handle_event(event)
 
     events = {
-        MOUSEMOTION: pass_to_widgets,
-        MOUSEBUTTONDOWN: pass_to_widgets,
-        KEYDOWN: pass_to_widgets,
+        pygame.MOUSEMOTION: pass_to_widgets,
+        pygame.MOUSEBUTTONDOWN: pass_to_widgets,
+        pygame.KEYDOWN: pass_to_widgets,
     }
 
 
@@ -109,7 +108,7 @@ class Widget:
     def handle_event(self, event):
         if not self.highlighted:
             return
-        if event.type == MOUSEBUTTONDOWN:
+        if event.type == pygame.MOUSEBUTTONDOWN:
             self.on_click()
 
 
@@ -222,7 +221,7 @@ class LineEdit(Widget):
             WidgetState.__init__(self)
             self.widget = widget
             self.show_cursor = True
-            pygame.time.set_timer(USEREVENT + 1, 600)
+            pygame.time.set_timer(pygame.USEREVENT + 1, 600)
             Widget.freeze_highlight = self.widget
             self.widget.update_text(self.show_cursor)
 
@@ -232,7 +231,7 @@ class LineEdit(Widget):
             self.widgets = State.stack[-2].widgets
 
         def __del__(self):
-            pygame.time.set_timer(USEREVENT + 1, 0)
+            pygame.time.set_timer(pygame.USEREVENT + 1, 0)
             Widget.freeze_highlight = None
 
         def blink(self, event):
@@ -240,18 +239,18 @@ class LineEdit(Widget):
             self.widget.update_text(self.show_cursor)
 
         def handleKeypress(self, event):
-            if event.key == K_BACKSPACE:
+            if event.key == pygame.K_BACKSPACE:
                 self.widget.value = self.widget.value[:-1]
-            elif event.key in (K_RETURN, K_ESCAPE):
+            elif event.key in (pygame.K_RETURN, pygame.K_ESCAPE):
                 self.quit()
             elif event.str:
                 self.widget.value += event.str
             self.widget.update_text(self.show_cursor)
 
         events = {
-            MOUSEBUTTONDOWN: lambda self, event: self.quit(),
-            USEREVENT + 1: blink,
-            KEYDOWN: handleKeypress,
+            pygame.MOUSEBUTTONDOWN: lambda self, event: self.quit(),
+            pygame.USEREVENT + 1: blink,
+            pygame.KEYDOWN: handleKeypress,
         }
 
     def __init__(self, label, pos, start_value):
@@ -274,7 +273,7 @@ class LineEdit(Widget):
 class KeyConfigButton(Widget):
     def get_key(self):
         event = pygame.event.wait()
-        while event.type != KEYDOWN:
+        while event.type != pygame.KEYDOWN:
             event = pygame.event.wait()
         self.key_list[0] = event.key
         self.update_text()

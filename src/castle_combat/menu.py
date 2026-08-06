@@ -1,5 +1,4 @@
-
-from .widget import *
+from .widget import Button, KeyConfigButton, LineEdit, SpinBox, WidgetState
 from . import common
 from . import sound
 from .config import conf, PlayerConfig

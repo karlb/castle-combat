@@ -1,5 +1,4 @@
 import pygame
-from pygame.locals import *
 from numpy import multiply
 
 from . import common
@@ -56,10 +55,10 @@ class BattlePlayer(BasePlayer):
         return move
 
     def handle_event(self, event):
-        if event.type == KEYDOWN:
+        if event.type == pygame.KEYDOWN:
             if event.key == self.player.config.keys.button[0]:
                 self.shoot([float(self.pos[0]), float(self.pos[1])])
-        if event.type in (KEYDOWN, KEYUP):
+        if event.type in (pygame.KEYDOWN, pygame.KEYUP):
             if self.get_move() != self.move:
                 self.set_movement(self.get_move())
 

@@ -1,4 +1,4 @@
-from pygame.locals import *
+import pygame
 from numpy import zeros
 from twisted.spread import pb
 
@@ -41,7 +41,7 @@ class BasePlayer:
 
     def handle_build_or_place_event(self, event, buttons, pos):
         keys = self.player.config.keys
-        if event.type == KEYDOWN:
+        if event.type == pygame.KEYDOWN:
             for dir in self.directions:
                 if event.key == getattr(keys, dir):
                     self.move(self.movement[dir])
@@ -52,7 +52,7 @@ class BasePlayer:
                 buttons[0]()
             elif event.key == keys.button[1]:
                 buttons[1]()
-        if event.type == KEYUP:
+        if event.type == pygame.KEYUP:
             for dir in self.directions:
                 if event.key == getattr(keys, dir):
                     looping_call = getattr(self, dir + "_repeat")
@@ -63,14 +63,14 @@ class BasePlayer:
 class Player:
 
     colors = (
-        Color("red"),
-        Color("green"),
-        Color("blue"),
-        Color("yellow"),
-        Color("brown"),
-        Color("cyan"),
-        Color("black"),
-        Color("white"),
+        pygame.Color("red"),
+        pygame.Color("green"),
+        pygame.Color("blue"),
+        pygame.Color("yellow"),
+        pygame.Color("brown"),
+        pygame.Color("cyan"),
+        pygame.Color("black"),
+        pygame.Color("white"),
     )
     names = (
         "Red Player",

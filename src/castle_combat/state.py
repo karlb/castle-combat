@@ -1,5 +1,4 @@
 import pygame
-from pygame.locals import *
 from twisted.internet import reactor
 
 
@@ -79,11 +78,11 @@ class MainState(State):
     """Handle all events which should always be handled"""
 
     def handle_keypress(self, event):
-        if event.key == K_RETURN and event.mod == KMOD_LALT:
+        if event.key == pygame.K_RETURN and event.mod == pygame.KMOD_LALT:
             from . import common
 
             common.toggle_fullscreen()
-        if event.key == K_q and event.mod == KMOD_LMETA:
+        if event.key == pygame.K_q and event.mod == pygame.KMOD_LMETA:
             reactor.stop()
 
     def handle(self):
@@ -108,8 +107,8 @@ class MainState(State):
     from .common import MUSICEVENT
 
     persistent_events = {
-        KEYDOWN: handle_keypress,
-        QUIT: handle_quit,
+        pygame.KEYDOWN: handle_keypress,
+        pygame.QUIT: handle_quit,
         MUSICEVENT: keepMusicRunning,
     }
 
@@ -118,7 +117,7 @@ def runStateLoop():
     def stateLoop():
         event = pygame.event.poll()
         top_state = State.stack[-1]
-        while event.type != NOEVENT:
+        while event.type != pygame.NOEVENT:
             d = top_state.on_event(event)
             if d:
                 d.addCallback(stateLoop)

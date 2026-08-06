@@ -2,7 +2,7 @@ import json
 import os
 from pathlib import Path
 
-from pygame.locals import *
+import pygame
 
 conf = None
 
@@ -36,29 +36,29 @@ class PlayerConfig:
             return
         PlayerConfig.instances.append(self)
         if player_id == 0:
-            self.keys.up = K_UP
-            self.keys.down = K_DOWN
-            self.keys.left = K_LEFT
-            self.keys.right = K_RIGHT
-            self.keys.button = [K_RETURN, K_RSHIFT]
+            self.keys.up = pygame.K_UP
+            self.keys.down = pygame.K_DOWN
+            self.keys.left = pygame.K_LEFT
+            self.keys.right = pygame.K_RIGHT
+            self.keys.button = [pygame.K_RETURN, pygame.K_RSHIFT]
         elif player_id == 1:
-            self.keys.up = K_e
-            self.keys.down = K_d
-            self.keys.left = K_s
-            self.keys.right = K_f
-            self.keys.button = [K_a, K_q]
+            self.keys.up = pygame.K_e
+            self.keys.down = pygame.K_d
+            self.keys.left = pygame.K_s
+            self.keys.right = pygame.K_f
+            self.keys.button = [pygame.K_a, pygame.K_q]
         elif player_id == 2:
-            self.keys.up = K_KP8
-            self.keys.down = K_KP5
-            self.keys.left = K_KP4
-            self.keys.right = K_KP6
-            self.keys.button = [K_KP1, K_KP2]
+            self.keys.up = pygame.K_KP8
+            self.keys.down = pygame.K_KP5
+            self.keys.left = pygame.K_KP4
+            self.keys.right = pygame.K_KP6
+            self.keys.button = [pygame.K_KP1, pygame.K_KP2]
         elif player_id == 3:
-            self.keys.up = K_i
-            self.keys.down = K_k
-            self.keys.left = K_j
-            self.keys.right = K_l
-            self.keys.button = [K_h, K_y]
+            self.keys.up = pygame.K_i
+            self.keys.down = pygame.K_k
+            self.keys.left = pygame.K_j
+            self.keys.right = pygame.K_l
+            self.keys.button = [pygame.K_h, pygame.K_y]
 
     @staticmethod
     def assign():

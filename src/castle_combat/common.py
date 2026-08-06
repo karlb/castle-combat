@@ -1,5 +1,4 @@
 import pygame
-from pygame.locals import *
 import numpy as np
 from numpy import array, indices
 import os
@@ -38,7 +37,7 @@ class NoBlockAvailable(ActionNotPossible):
 
 ###### Events #####
 
-MUSICEVENT = USEREVENT + 2
+MUSICEVENT = pygame.USEREVENT + 2
 
 ###### Graphics functions ######
 
@@ -57,7 +56,7 @@ def load_image(name, colorkey=None, alpha=False):
     if colorkey is not None:
         if colorkey == -1:
             colorkey = image.get_at((0, 0))
-        image.set_colorkey(colorkey, RLEACCEL)
+        image.set_colorkey(colorkey, pygame.RLEACCEL)
     return image
 
 
@@ -91,7 +90,7 @@ def update():
 
 def colorize(surface, color):
     """Returns a new colored surface"""
-    if surface.get_flags() & SRCALPHA:
+    if surface.get_flags() & pygame.SRCALPHA:
         surface = surface.convert_alpha()
     else:
         surface = surface.convert()

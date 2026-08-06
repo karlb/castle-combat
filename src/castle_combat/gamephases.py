@@ -1,5 +1,4 @@
 import pygame
-from pygame.locals import *
 from numpy import divide, logical_and, putmask, subtract, where, zeros
 
 from . import common
@@ -9,8 +8,8 @@ from .state import State, IgnoreEvent
 
 class GameState(State):
     def handle_keypress(self, event):
-        if common.debug and event.type == KEYDOWN:
-            if event.key == K_BACKSPACE:
+        if common.debug and event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_BACKSPACE:
                 d = game.server_call("next_phase")
                 raise IgnoreEvent(d)
 
@@ -25,7 +24,7 @@ class GameState(State):
         if game.server:
             game.server.quit()
 
-    persistent_events = {KEYDOWN: handle_keypress}
+    persistent_events = {pygame.KEYDOWN: handle_keypress}
 
 
 class Phase(State):
@@ -53,8 +52,8 @@ class Phase(State):
             common.update()
 
     def handle_keypress(self, event):
-        if event.type == KEYDOWN:
-            if event.key == K_ESCAPE:
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
                 if game.server:
                     game.server.call("pause")
                 else:
@@ -64,7 +63,7 @@ class Phase(State):
             if player.local:
                 player.handle_event(event)
 
-    events = {KEYDOWN: handle_keypress, KEYUP: handle_keypress}
+    events = {pygame.KEYDOWN: handle_keypress, pygame.KEYUP: handle_keypress}
 
 
 class AnnouncePhase(State):
@@ -92,7 +91,7 @@ class AnnouncePhase(State):
             game.server_call("next_phase")
             raise IgnoreEvent
 
-    events = {KEYDOWN: proceed_if_waited_long_enough}
+    events = {pygame.KEYDOWN: proceed_if_waited_long_enough}
 
     def cleanup(self):
         pass
@@ -128,7 +127,7 @@ class BuildPhase(Phase):
         def build_actions(passed_milliseconds):
             pygame.time.delay(1)
 
-        pygame.time.set_timer(USEREVENT, 500)
+        pygame.time.set_timer(pygame.USEREVENT, 500)
         self.actions = build_actions
         self.next_phase = lambda: AnnouncePhase(PlacePhase)
         Phase.__init__(self)
@@ -168,7 +167,7 @@ class BuildPhase(Phase):
 
         clean_walls()
         game.field.add_houses(5)
-        pygame.time.set_timer(USEREVENT, 0)
+        pygame.time.set_timer(pygame.USEREVENT, 0)
 
         # eleminate players
 
@@ -190,7 +189,7 @@ class PlacePhase(Phase):
         def place_actions(passed_milliseconds):
             pygame.time.delay(1)
 
-        pygame.time.set_timer(USEREVENT, 500)
+        pygame.time.set_timer(pygame.USEREVENT, 500)
         self.actions = place_actions
         self.next_phase = lambda: AnnouncePhase(BattlePhase)
         Phase.__init__(self)
@@ -201,7 +200,7 @@ class PlacePhase(Phase):
         ]
 
     def cleanup(self):
-        pygame.time.set_timer(USEREVENT, 0)
+        pygame.time.set_timer(pygame.USEREVENT, 0)
 
 
 class BattlePhase(Phase):

@@ -1,4 +1,4 @@
-from pygame.locals import *
+import pygame
 from numpy import add, multiply
 
 from . import common
@@ -65,7 +65,7 @@ class SelectPlayer(BasePlayer):
     def handle_event(self, event):
         if self.finished:
             return
-        if event.type == KEYDOWN:
+        if event.type == pygame.KEYDOWN:
             keys = self.player.config.keys
             if event.key in (keys.up, keys.right):
                 self.select_castle(-1)
