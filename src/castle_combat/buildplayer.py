@@ -8,7 +8,6 @@ from .player import BasePlayer
 
 
 class BuildPlayer(BasePlayer):
-
     select_pic = common.load_image("select.png", alpha=True)
     wait_pic = common.load_image("waitblock.png", alpha=True)
     cantbuild_pic = common.load_image("cantbuild.png", alpha=True)

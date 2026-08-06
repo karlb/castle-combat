@@ -14,8 +14,7 @@ class WaitForPlayersState(WidgetState):
 
 
 class GamePerspectiveForClient(pb.Referenceable):
-    """Contains all methods related to the Game class, which can be called from the clients
-	"""
+    """Contains all methods related to the Game class, which can be called from the clients"""
 
     def __init__(self, server):
         self.server = server
@@ -30,8 +29,8 @@ class GamePerspectiveForClient(pb.Referenceable):
 class ClientAvatar(pb.Avatar):
     """This class contains all functions which can be called by the client.
 
-	   There is exacty one instance of this class per connected client.
-	"""
+    There is exacty one instance of this class per connected client.
+    """
 
     def __init__(self, server, mind):
         self.server = server
@@ -94,7 +93,6 @@ class RequestClientRealm:
 
 
 class Server:
-
     clients = []
 
     def __init__(self, map, total_players):

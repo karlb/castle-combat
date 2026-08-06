@@ -3,10 +3,10 @@ from twisted.internet import reactor
 
 
 class IgnoreEvent(Exception):
-    """ Stop processing this event
-	
-	Wait until `d` succeeds before processing any other events if `d` is given.
-	"""
+    """Stop processing this event
+
+    Wait until `d` succeeds before processing any other events if `d` is given.
+    """
 
     def __init__(self, d=None):
         self.d = d
@@ -40,7 +40,7 @@ class State:
             return False
 
     def handle(self):
-        """ Can return a deferred, in which case nothing happens until that deferred succeeds """
+        """Can return a deferred, in which case nothing happens until that deferred succeeds"""
         pass
 
     def init_state_display(self):
@@ -48,7 +48,7 @@ class State:
 
     @staticmethod
     def on_event(event):
-        """ Can return a deferred, in which case nothing happens until that deferred succeeds """
+        """Can return a deferred, in which case nothing happens until that deferred succeeds"""
         # get top_state at the beginning, because must not change during the execution
         try:
             top_state = State.stack[-1]
@@ -128,7 +128,6 @@ def runStateLoop():
             d.addCallback(stateLoop)
             return
         reactor.callLater(0.01, stateLoop)
-
 
     reactor.callWhenRunning(stateLoop)
     reactor.run()

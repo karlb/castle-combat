@@ -30,7 +30,6 @@ class WidgetState(State):
 
 
 class Widget:
-
     freeze_highlight = None
     hidden = False
 
@@ -123,7 +122,6 @@ class Label(Widget):
 
 
 class SpinBox(Widget):
-
     up = [
         common.colorize(common.load_image("arrow.png", alpha=True), col)
         for col in ((0, 0, 0), (150, 0, 0))

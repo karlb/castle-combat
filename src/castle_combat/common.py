@@ -256,10 +256,10 @@ def flood_fill(fill_map, pos, source, destination):
 
 def flood_fill2(fill_map, pos, source, destination):
     """Special flood fill algorithm
-	
-	Optimized for enclosed territory calculation.
-	- Fills diagonally
-	- Works only if the algorithm doesn't reach the edges"""
+
+    Optimized for enclosed territory calculation.
+    - Fills diagonally
+    - Works only if the algorithm doesn't reach the edges"""
 
     # stop recursion, if this field is already filled
     if fill_map[pos] != source:

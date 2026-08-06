@@ -7,7 +7,6 @@ from .game import game
 
 
 class BasePlayer:
-
     repeat_threshold = 0.6  # has to be a multiple of repeat_interval
     repeat_interval = 0.12
     directions = ("up", "down", "left", "right")
@@ -61,7 +60,6 @@ class BasePlayer:
 
 
 class Player:
-
     colors = (
         pygame.Color("red"),
         pygame.Color("green"),
@@ -196,7 +194,6 @@ class PlayerRemoteCache(Player, pb.RemoteCache):
         self.__dict__ = state
         self.secured = zeros(common.field_size)
         self.set_player_id(self._player_id)
-
 
         # self.build_player = buildplayer.BuildPlayer(self)
         # self.place_player = placeplayer.PlacePlayer(self)

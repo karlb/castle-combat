@@ -9,7 +9,6 @@ from . import common
 
 
 class Castle(pb.Copyable, pb.RemoteCopy):
-
     # instances = []
     castle_pic = common.load_image("castle.png", alpha=True)
     bigcastle_pic = common.load_image("bigcastle.png", alpha=True)
@@ -45,7 +44,6 @@ pb.setUnjellyableForClass(Castle, Castle)
 
 
 class Grunt:
-
     instances = []
     grunt_pics = [
         common.load_image("tank%d.png" % (i + 1), alpha=True) for i in range(4)
@@ -130,7 +128,6 @@ class Grunt:
 
 
 class Field:
-
     # all values >= 0 are walls belonging to the player with that index
     (
         EMPTY,
@@ -161,10 +158,10 @@ class Field:
 
     def create_background(self):
         def create_basic_background():
-            """ Returns an array with one element per pixel in the background.
+            """Returns an array with one element per pixel in the background.
 
-			This element is 1 if in a river and 0 else
-			"""
+            This element is 1 if in a river and 0 else
+            """
             is_river = where(self.array == self.RIVER, 1, 0)
             is_river_large = repeat(
                 repeat(is_river, common.block_size, 0), common.block_size, 1
@@ -278,9 +275,9 @@ class Field:
         def generate_fill_map(player_id):
             """Generates a map suitable for flood fill
 
-			Empty fields are set to zero, the border and all fields with walls belonging
-			to the given player are set to one.
-			"""
+            Empty fields are set to zero, the border and all fields with walls belonging
+            to the given player are set to one.
+            """
             # build map with borders
             fill_map = zeros(common.field_size + 4)
             fill_map[0, :] = 1

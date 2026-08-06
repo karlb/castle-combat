@@ -7,7 +7,6 @@ from .field import Field
 
 
 class PlacePlayer(BasePlayer):
-
     cantbuild_pic = common.load_image("cantbuild.png", alpha=True)
 
     def __init__(self, player):

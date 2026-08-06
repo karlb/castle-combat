@@ -8,7 +8,6 @@ from .game import game
 
 
 class BattlePlayer(BasePlayer):
-
     crosshair_pic = common.load_image("crosshair.png", alpha=True)
     empty_crosshair_pic = common.load_image("notready.png", alpha=True)
 

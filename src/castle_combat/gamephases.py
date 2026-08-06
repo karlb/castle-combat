@@ -119,7 +119,6 @@ class AnnouncePhase(State):
 
 
 class BuildPhase(Phase):
-
     phase_name = "build"
     duration = 18
 
@@ -181,7 +180,6 @@ class BuildPhase(Phase):
 
 
 class PlacePhase(Phase):
-
     phase_name = "place"
     duration = 15
 
@@ -204,7 +202,6 @@ class PlacePhase(Phase):
 
 
 class BattlePhase(Phase):
-
     phase_name = "battle"
     duration = 10
 
@@ -247,7 +244,6 @@ class BattlePhase(Phase):
 
 
 class SelectPhase(Phase):
-
     phase_name = "select"
     duration = 20
 

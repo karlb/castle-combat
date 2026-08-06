@@ -31,17 +31,17 @@ class ClientObject(pb.RemoteCache):
 def delegate_and_call_observers(cls, to_class, method_names):
     """Adds wrapper methods around the given methods to inform network clients
 
-	This function should be called on a ServerObject class
-	The added code looks like this:
-	def METHOD_NAME(self, *args, **kwargs):
-		try:
-			TO_CLASS.METHOD_NAME(self, *args, **kwargs)
-		except common.ActionNotPossible:
-			return
-		for o in self.observers: o.callRemote('METHOD_NAME', *args, **kwargs)
-	local_METHOD_NAME = METHOD_NAME
-	remote_METHOD_NAME = METHOD_NAME
-	"""
+    This function should be called on a ServerObject class
+    The added code looks like this:
+    def METHOD_NAME(self, *args, **kwargs):
+            try:
+                    TO_CLASS.METHOD_NAME(self, *args, **kwargs)
+            except common.ActionNotPossible:
+                    return
+            for o in self.observers: o.callRemote('METHOD_NAME', *args, **kwargs)
+    local_METHOD_NAME = METHOD_NAME
+    remote_METHOD_NAME = METHOD_NAME
+    """
 
     def delegate_and_call(method_name, self, *args, **kwargs):
         try:
@@ -64,13 +64,13 @@ def delegate_and_call_observers(cls, to_class, method_names):
 def observe_and_delegate(cls, to_class, method_names):
     """Adds wrapper methods around the given methods to handle networking
 
-	This function should be called on a ClientObject class
-	The added code looks like this:
-	local_METHOD_NAME = METHOD_NAME
-	observe_METHOD_NAME = TO_CLASS.METHOD_NAME
-	def METHOD_NAME(self, *args, **kwargs):
-		self.remote_ref.callRemote('METHOD_NAME', *args, **kwargs)
-	"""
+    This function should be called on a ClientObject class
+    The added code looks like this:
+    local_METHOD_NAME = METHOD_NAME
+    observe_METHOD_NAME = TO_CLASS.METHOD_NAME
+    def METHOD_NAME(self, *args, **kwargs):
+            self.remote_ref.callRemote('METHOD_NAME', *args, **kwargs)
+    """
 
     def call_remote(method_name, self, *args, **kwargs):
         self.remote_ref.callRemote(method_name, *args, **kwargs)
@@ -87,8 +87,8 @@ def observe_and_delegate(cls, to_class, method_names):
 def networkify(cacheable, remote_cache, implementation, method_names):
     """Wraps methods in a Cacheable/RemoteCache class pair to make a sequence of methods network aware
 
-	The first three parameter are classes, the methods_names parameter should be a list of methods_names.
-	"""
+    The first three parameter are classes, the methods_names parameter should be a list of methods_names.
+    """
     delegate_and_call_observers(cacheable, implementation, method_names)
     observe_and_delegate(remote_cache, implementation, method_names)
     pb.setUnjellyableForClass(cacheable, remote_cache)

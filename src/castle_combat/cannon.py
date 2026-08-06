@@ -7,7 +7,6 @@ from . import sound
 
 
 class Shot:
-
     shot_pic = common.load_image("shot.png", alpha=True)
 
     def __init__(self, cannon, target):
@@ -51,7 +50,6 @@ class Shot:
 
 
 class Cannon:
-
     cannon_pic = (
         [common.load_image("cannon%04d.png" % i, -1) for i in range(1, 31)],
         [common.load_image("bigcannon%04d.png" % i, -1) for i in range(1, 31)],

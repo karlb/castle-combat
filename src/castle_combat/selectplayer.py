@@ -7,7 +7,6 @@ from .player import BasePlayer
 
 
 class SelectPlayer(BasePlayer):
-
     select_pic = common.load_image("castleselect.png", alpha=True)
 
     def __init__(self, player):

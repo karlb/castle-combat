@@ -26,7 +26,6 @@ class Keys:
 
 
 class PlayerConfig:
-
     instances = []
 
     def __init__(self, player_id):

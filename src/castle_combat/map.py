@@ -110,7 +110,6 @@ class Map(pb.Copyable, pb.RemoteCopy):
 
 
 class GruntAssault(Map):
-
     title = "Grunt Assault"
     allowed_players = (1,)
     background_image = "back-noriver.jpg"
@@ -206,7 +205,6 @@ class GruntAssault(Map):
 
 
 class RiverMap(Map):
-
     title = "River"
     game_options = ("land_owners",)
 
@@ -216,7 +214,6 @@ class RiverMap(Map):
 
 
 class RiverMap2p(RiverMap):
-
     allowed_players = (2,)
     background_image = "back-river.jpg"
 
@@ -243,7 +240,6 @@ class RiverMap2p(RiverMap):
 
 
 class RiverMap4p(RiverMap):
-
     allowed_players = (3, 4)
     background_image = "back-river4.jpg"
 
@@ -290,7 +286,6 @@ class RiverMap4p(RiverMap):
 
 
 class ConquerMap(Map):
-
     title = "Conquer"
     game_options = ("build_only_near_walls",)
     allowed_players = (2, 3, 4)
