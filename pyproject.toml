@@ -9,7 +9,13 @@ authors = [{ name = "Karl Bartel", email = "karl42@gmail.com" }]
 # pygame-ce is the maintained pygame fork and is API-compatible (it still
 # provides the `pygame` module). Unlike pygame, it ships wheels for current
 # Python versions, so no source build is needed.
-dependencies = ["pygame-ce", "numpy", "twisted"]
+#
+# The lower bounds are support floors, not known breakage: the test suite passes
+# on all of them, and the API the game uses (surfarray, SCALED, reactor) has been
+# stable for far longer. They exist so a bug report names a combination that was
+# actually tried. numpy in particular needs no `>=2` bound -- the fixes in
+# 90d0e50 and 65600a1 work under both major versions.
+dependencies = ["pygame-ce>=2.2", "numpy>=1.26", "twisted>=22.10"]
 
 [dependency-groups]
 dev = ["pytest"]

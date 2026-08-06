@@ -44,9 +44,9 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "numpy" },
-    { name = "pygame-ce" },
-    { name = "twisted" },
+    { name = "numpy", specifier = ">=1.26" },
+    { name = "pygame-ce", specifier = ">=2.2" },
+    { name = "twisted", specifier = ">=22.10" },
 ]
 
 [package.metadata.requires-dev]
