@@ -3,13 +3,15 @@ from twisted.spread import pb
 from twisted.cred.credentials import UsernamePassword
 from .widget import WidgetState
 
-# import to allow unjellying
-from . import player
-from . import selectplayer
-from . import placeplayer
-from . import buildplayer
-from . import battleplayer
-from . import map
+# Imported for the side effect: each module calls networkify() at import time,
+# which registers its classes with pb.setUnjellyableForClass. Dropping any of
+# these breaks unjellying at runtime, not at import.
+from . import player  # noqa: F401
+from . import selectplayer  # noqa: F401
+from . import placeplayer  # noqa: F401
+from . import buildplayer  # noqa: F401
+from . import battleplayer  # noqa: F401
+from . import map  # noqa: F401
 
 
 class WaitForSeverState(WidgetState):
