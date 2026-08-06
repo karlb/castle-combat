@@ -54,7 +54,7 @@ KEYS = [
 Playthrough = collections.namedtuple("Playthrough", "phases cannons_placed")
 
 
-def play(map_class, frames, advance, toggle_fullscreen_every=None):
+def play(map_class, frames, advance, toggle_fullscreen_every=None, ai_players=0):
     """Run a two player game for a number of frames"""
     from castle_combat.game import game
     from castle_combat.server import Server
@@ -62,7 +62,7 @@ def play(map_class, frames, advance, toggle_fullscreen_every=None):
     MainState()
     menu.MenuState()
     server = Server(map_class(dict(difficulty="medium")), 2)
-    server.run(2, 0)
+    server.run(2 - ai_players, ai_players)
 
     keyboard = random.Random(7)
     phases = []
@@ -114,6 +114,21 @@ def test_a_game_runs_through_several_rounds(fake_time, twisted_errors, map_class
     assert result.phases.count("battle") >= 3
     # the place phase has to get far enough to build cannons
     assert result.cannons_placed > 0
+
+
+def test_a_game_runs_with_an_ai_player(fake_time, twisted_errors):
+    """One human against one AI, a line-up the menu offers by default
+
+    Both of the crashes this covers happened on the way in rather than in the
+    log: Server.run() unpacked the single player returned by
+    claim_player_as_local() into a (player_id, avatar) pair, and BaseAI.call()
+    then reached for a remote_call() that Player never had. Driving the AI
+    through whole rounds is what makes them show up.
+    """
+    result = play(ConquerMap, 600, fake_time, ai_players=1)
+
+    assert twisted_errors == []
+    assert "battle" in result.phases
 
 
 def test_fullscreen_can_be_toggled_during_a_game(fake_time, twisted_errors):

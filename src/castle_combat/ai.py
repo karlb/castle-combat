@@ -32,7 +32,10 @@ class BaseAI:
                 h()
 
     def call(self, command, *args):
-        self.player.remote_call(command, *args)
+        # The commands are the networkified methods of the current phase's
+        # player object, so this takes the same route a keypress does: the
+        # wrapper applies the move locally and forwards it to the clients.
+        getattr(self.player.phase_player, command)(*args)
 
 
 class TestAI(BaseAI):

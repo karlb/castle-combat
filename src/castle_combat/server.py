@@ -162,10 +162,10 @@ class Server:
         for i in range(ai_players):
             from . import ai
 
-            (player_id, avatar) = self.claim_player_as_local()
-            self.game.players[player_id].local = True
-            newai = ai.DefaultAI(player_id)
-            self.game.players[player_id].ai = newai
+            player = self.claim_player_as_local()
+            player.local = True
+            newai = ai.DefaultAI(player.player_id)
+            player.ai = newai
             self.ai_players.append(newai)
 
     def quit(self):
