@@ -1,5 +1,4 @@
 import pygame
-from pygame.locals import *
 import numpy as np
 from numpy import add, multiply, nonzero, putmask, ravel, repeat, subtract, where, zeros
 from random import randint

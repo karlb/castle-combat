@@ -1,4 +1,3 @@
-from pygame.locals import *
 from numpy import add, subtract
 from . import common
 import random

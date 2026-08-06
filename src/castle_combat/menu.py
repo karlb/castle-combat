@@ -1,4 +1,3 @@
-from pygame.locals import *
 
 from .widget import *
 from . import common

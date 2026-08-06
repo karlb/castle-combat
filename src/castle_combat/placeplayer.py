@@ -1,4 +1,3 @@
-from pygame.locals import *
 from numpy import add, multiply
 
 from . import common
