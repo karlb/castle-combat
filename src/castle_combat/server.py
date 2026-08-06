@@ -111,7 +111,7 @@ class Server:
 
         portal = Portal(RequestClientRealm(self))
         checker = InMemoryUsernamePasswordDatabaseDontUse()
-        checker.addUser("guest", "guest")
+        checker.addUser(b"guest", b"guest")
         # 	checker = AllowAnonymousAccess()
         portal.registerChecker(checker)
         self.listening_port = reactor.listenTCP(pb.portno, pb.PBServerFactory(portal))

@@ -207,4 +207,6 @@ class PlayerRemoteCache(Player, pb.RemoteCache):
 # def select_castle(self, *args, **kwargs):
 # 	self.remote_ref.callRemote('select_castle', *args, **kwargs)
 
-pb.setUnjellyableForClass("player.PlayerCacheable", PlayerRemoteCache)
+# the class rather than a name, so that moving the module cannot silently
+# leave the registration pointing at a type that no longer exists
+pb.setUnjellyableForClass(PlayerCacheable, PlayerRemoteCache)
