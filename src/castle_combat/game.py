@@ -9,7 +9,7 @@ class Game(pb.Referenceable, common.Borg):
     def __init__(self, players, server=None):
         common.Borg.__init__(self)
 
-        if players == None:
+        if players is None:
             return
 
         class DummyPhase:

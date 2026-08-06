@@ -39,9 +39,9 @@ class Widget:
         self.on_click = on_click
         self.highlighted = False
         self.inactive = False
-        if text != None:
+        if text is not None:
             self.surfaces_from_text(text)
-        elif surfaces != None:
+        elif surfaces is not None:
             (self.normal_surface, self.highlight_surface) = surfaces
         else:
             raise Exception("text or surfaces argument required")
@@ -49,7 +49,7 @@ class Widget:
         # negative positions are distance from screen edge
         pos = list(pos)
         for i in (0, 1):
-            if pos[i] == None:
+            if pos[i] is None:
                 pos[i] = (
                     common.screen.get_size()[i] - self.normal_surface.get_size()[i]
                 ) / 2
@@ -135,7 +135,7 @@ class SpinBox(Widget):
         self._choices = list(choices)
         self.index = 0
         self.label = label
-        if default != None:
+        if default is not None:
             self.value = default
         if on_change:
             self.on_change = on_change

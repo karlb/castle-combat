@@ -82,8 +82,8 @@ class Client:
         self.game.run_callback = self.wait_for_server_state.quit
 
     def claim_players_as_local_callback(self, dummy):
-        def player_claimed(player):
-            player.local = True
+        def player_claimed(claimed_player):
+            claimed_player.local = True
 
         for i in range(self.local_players):
             d = self.perspective.callRemote("claim_player_as_local")

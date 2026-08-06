@@ -128,7 +128,8 @@ class Signal:
         for prio in list(self.callbacks_by_priority.keys()):
             try:
                 self.callbacks_by_priority[prio].remove(callback)
-            except:
+            except ValueError:
+                # not connected at this priority
                 pass
 
     def emit(self, *args, **kwargs):

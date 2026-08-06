@@ -25,7 +25,7 @@ class Castle(pb.Copyable, pb.RemoteCopy):
                 map.array[pos[0] + x][pos[1] + y] = Field.CASTLE
 
     def backbuffer_blit(self):
-        if self.big == False:
+        if not self.big:
             pic = Castle.castle_pic
         else:
             pic = Castle.bigcastle_pic
@@ -296,7 +296,6 @@ class Field:
         def update_screen(old_secured, foreign_walls):
             # get some local vars for speed
             block_size = common.block_size
-            field_size = common.field_size[1]
 
             # check which parts have changed
             changed_fields = np.argwhere(old_secured != player.secured)
@@ -311,7 +310,7 @@ class Field:
                     common.backbuffer_blit(player.ground_pic, screen_pos)
                 else:
                     self.blit_background((x, y))
-                self.update((x, y), restart_at == None)
+                self.update((x, y), restart_at is None)
 
         if not restart_at:
             # do a complete check

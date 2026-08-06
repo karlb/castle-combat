@@ -75,8 +75,6 @@ class SelectPlayer(BasePlayer):
                 self.confirm_select()
             elif event.key == keys.button[1]:
                 pass
-            else:
-                catched = False
 
     def handle_movement(self, passed_milliseconds):
         pass

@@ -32,13 +32,13 @@ class BuildPlayer(BasePlayer):
         )
 
     def handle_movement(self, passed_milliseconds):
-        if game.server and self.block == None:
+        if game.server and self.block is None:
             self.wait_for_block -= passed_milliseconds
             if self.wait_for_block <= 0:
                 self.generate_random_block()
 
     def is_allowed(self, pos):
-        if not "build_only_near_walls" in game.field.map.game_options:
+        if "build_only_near_walls" not in game.field.map.game_options:
             return True
         else:
             topleft = common.in_bounds(subtract(pos, 3))
