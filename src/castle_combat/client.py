@@ -82,7 +82,6 @@ class Client:
     def claim_players_as_local_callback(self, dummy):
         def player_claimed(player):
             player.local = True
-            print("got player %d!" % player.player_id)
 
         for i in range(self.local_players):
             d = self.perspective.callRemote("claim_player_as_local")

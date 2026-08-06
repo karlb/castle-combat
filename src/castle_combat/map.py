@@ -64,21 +64,18 @@ class Map(pb.Copyable, pb.RemoteCopy):
     def set_land_owners(self):
         game.field.owner = where(self.array == Field.RIVER, -1, -2)
         for player in game.players:
-            print("setting land for player", player)
             castle = [castle for castle in self.castles if castle.player is player][0]
             common.flood_fill(game.field.owner, castle.pos, -2, player.player_id)
 
     def add_end_test(self):
         def standard_end_test():
             alive = [player for player in game.players if player.alive]
-            print("end test %d" % len(alive))
             if len(alive) > 1:
                 return
             if len(alive) == 0:
                 string = "Draw game!"
             else:
                 string = "%s wins!" % alive[0].name
-            print("game end")
 
             from .widget import Button, WidgetState
 

@@ -199,17 +199,9 @@ class Field:
 
             return dest
 
-        import time
-
-        t1 = time.process_time()
         pixels = create_basic_background()
-        t2 = time.process_time()
         pixels = scatter(pixels)
-        t3 = time.process_time()
         pixels = colorize(pixels)
-        t4 = time.process_time()
-
-        print("Background creation timing:", t2 - t1, t3 - t2, t4 - t3)
 
         self.surface = pygame.surfarray.make_surface(pixels)
         common.backbuffer = self.surface.convert()
@@ -323,14 +315,9 @@ class Field:
                     self.blit_background((x, y))
                 self.update((x, y), restart_at == None)
 
-        import time
-
-        t1 = time.process_time()
-
         if not restart_at:
             # do a complete check
             fill_map = generate_fill_map(player.player_id)
-            t2 = time.process_time()
             common.flood_fill2(fill_map, (1, 1), False, True)
         else:
             # just calculate the changes caused by changeing the value at restart_at
@@ -350,10 +337,7 @@ class Field:
                 # self.update(restart_at)
                 return
             fill_map[restart_at] = 0
-            t2 = time.process_time()
             common.flood_fill2(fill_map, restart_at, False, True)
-
-        t3 = time.process_time()
 
         # save results
         old_secured = player.secured  # for update_screen
@@ -372,18 +356,6 @@ class Field:
 
         # now we know which areas are secured, so let's update the screen
         update_screen(old_secured, foreign_walls)
-
-        t4 = time.process_time()
-        print(
-            "Setup:",
-            t2 - t1,
-            "+ Flood Fill:",
-            t3 - t2,
-            "+ Redraw:",
-            t4 - t3,
-            "= Total:",
-            t4 - t1,
-        )
 
     def kill_grunt_if_there_is_one(self, pos):
         if self[pos] == self.GRUNT:

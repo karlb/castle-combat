@@ -214,7 +214,6 @@ class MenuState(WidgetState):
             from os.path import abspath, join
 
             file = "file://" + abspath(join(common.data_path, "doc", "rules.html"))
-            print(file)
             open(file, new=True)
 
         draw_background()

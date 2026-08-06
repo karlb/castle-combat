@@ -50,7 +50,6 @@ class PlayerConfig:
 
         for player in game.players:
             if player.local:
-                print("assign config", i, "to player", player.player_id)
                 config = PlayerConfig.instances[i]
                 i += 1
             else:

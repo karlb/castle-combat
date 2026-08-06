@@ -113,7 +113,6 @@ class Game(pb.Referenceable, common.Borg):
         self.phase = AnnouncePhase(SelectPhase)
 
     def remote_next_phase(self):
-        print("\t-- Next Phase --")
         self.phase.cleanup()
         self.phase.quit()
         getattr(self, self.phase.phase_name + "_phase_finished").emit()  # fire signal

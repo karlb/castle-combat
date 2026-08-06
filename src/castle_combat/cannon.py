@@ -95,7 +95,6 @@ class Cannon:
         game.cannons.append(self)
 
     def hit(self):
-        print("cannon hit!")
         self.hitpoints -= 1
         if self.hitpoints == 0:
             self.static_pic = self.destroyed_pic[self.type][randint(0, 4)]
@@ -127,11 +126,7 @@ class Cannon:
             pic = int((1 - angle) * 30)
             while pic < 0:
                 pic += 30
-        try:
-            common.blit(
-                self.cannon_pic[pic],
-                (self.pos[0] * common.block_size, self.pos[1] * common.block_size),
-            )
-        except IndexError:
-            print(pic, angle)
-            raise
+        common.blit(
+            self.cannon_pic[pic],
+            (self.pos[0] * common.block_size, self.pos[1] * common.block_size),
+        )

@@ -42,7 +42,6 @@ class ClientAvatar(pb.Avatar):
     ##### callbacks
 
     def logout_callback(self):
-        print(self, "logged out")
         self.server.clients.remove(self)
 
         # quit game_state if it didn't quit already
@@ -127,7 +126,7 @@ class Server:
         try:
             eval("self.game.remote_" + command)(*args)
         except common.ActionNotPossible:
-            print(command, "was not possible")
+            # illegal moves are routine, e.g. building on an occupied field
             return
 
         dl = defer.DeferredList(

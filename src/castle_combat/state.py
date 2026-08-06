@@ -19,13 +19,11 @@ class State:
     stack = []
 
     def __init__(self):
-        print("new state", self)
         State.stack.append(self)
         self.init_state_display()
 
     def quit(self):
         """leave this state"""
-        print("leaving state", self)
         removedState = State.stack.pop()
         assert removedState == self, (
             "Can only leave active state. Tried to exit %s but %s is active"
@@ -91,7 +89,6 @@ class MainState(State):
 
     def handle(self):
         # quit if only MainState is left
-        print("q")
         self.quit()
 
     def quit(self):
