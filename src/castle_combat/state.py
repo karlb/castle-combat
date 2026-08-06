@@ -98,6 +98,12 @@ class MainState(State):
         State.quit(self)
         reactor.stop()
 
+    def handle_quit(self, event):
+        # The window can be closed from any state, but State.quit() can only
+        # leave the active one, so go straight for the reactor. Closing during
+        # a game would otherwise pop whichever state happens to be on top.
+        reactor.stop()
+
     def keepMusicRunning(self, event):
         from . import sound
 
@@ -107,7 +113,7 @@ class MainState(State):
 
     persistent_events = {
         KEYDOWN: handle_keypress,
-        QUIT: (lambda self, event: self.quit),
+        QUIT: handle_quit,
         MUSICEVENT: keepMusicRunning,
     }
 
