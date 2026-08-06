@@ -296,15 +296,23 @@ class Field:
 
             # check which parts have changed
             changed_fields = np.argwhere(old_secured != player.secured)
-            for x, y in changed_fields:
+            # A castle or a cannon is drawn from its top left block over the
+            # blocks right of and below it, which update() only redraws for
+            # that top left block. Walking backwards puts the covered blocks
+            # down first, so the sprite ends up on top of their ground, just
+            # like in draw_backbuffer().
+            for x, y in changed_fields[::-1]:
                 # the screen has changed at x, y => update the screen
                 if not old_secured[x, y]:
-                    screen_pos = (x * block_size, y * block_size)
                     if self[x, y] in (self.HOUSE, self.GRUNT) or foreign_walls[x, y]:
                         self.kill_grunt_if_there_is_one((x, y))
-                        self.blit_background((x, y))
                         self[x, y] = self.EMPTY
-                    common.backbuffer_blit(player.ground_pic, screen_pos)
+                    # the ground is translucent, so it has to go onto the bare
+                    # background rather than onto whatever was drawn here
+                    self.blit_background((x, y))
+                    common.backbuffer_blit(
+                        player.ground_pic, (x * block_size, y * block_size)
+                    )
                 else:
                     self.blit_background((x, y))
                 self.update((x, y), restart_at is None)
