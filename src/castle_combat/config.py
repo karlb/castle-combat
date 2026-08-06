@@ -44,6 +44,7 @@ class PlayerConfig:
             self.keys.right = K_l
             self.keys.button = [K_h, K_y]
 
+    @staticmethod
     def assign():
         i = 0
         from .game import game
@@ -55,8 +56,6 @@ class PlayerConfig:
             else:
                 config = PlayerConfig(-1)
             player.set_config(config)
-
-    assign = staticmethod(assign)
 
 
 class Config:

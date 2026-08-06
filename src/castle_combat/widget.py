@@ -30,7 +30,7 @@ class WidgetState(State):
     }
 
 
-class Widget(object):
+class Widget:
 
     freeze_highlight = None
     hidden = False

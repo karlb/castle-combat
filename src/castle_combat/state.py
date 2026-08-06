@@ -47,6 +47,7 @@ class State:
     def init_state_display(self):
         pass
 
+    @staticmethod
     def on_event(event):
         """ Can return a deferred, in which case nothing happens until that deferred succeeds """
         # get top_state at the beginning, because must not change during the execution
@@ -72,8 +73,6 @@ class State:
             return handler(top_state, event)
         except IgnoreEvent as e:
             return e.d
-
-    on_event = staticmethod(on_event)
 
 
 class MainState(State):

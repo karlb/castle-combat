@@ -5,13 +5,9 @@ from . import common
 
 class ServerObject(pb.Cacheable, pb.Referenceable):
     def __init__(self, *args, **kwargs):
-        # Call superclass (this can be done with 'super', after switching to new-style classes)
-        superclass = [
-            cls
-            for cls in self.__class__.__bases__
-            if cls not in (pb.Cacheable, pb.Referenceable, ServerObject)
-        ][0]
-        superclass.__init__(self, *args, **kwargs)
+        # Subclasses are declared as (ServerObject, Implementation). None of the
+        # pb flavors define __init__, so this reaches the implementation class.
+        super().__init__(*args, **kwargs)
         self.observers = []
 
     def getStateToCacheAndObserveFor(self, perspective, observer):
