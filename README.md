@@ -30,6 +30,18 @@ cd castle-combat
 uv run castle-combat
 ```
 
+Run the tests with `uv run pytest`, and the linter and formatter with
+`uv run ruff check` and `uv run ruff format`.
+
+Git settings are not shared by cloning, so enable these once per checkout:
+
+```sh
+# reject commits whose staged Python files fail ruff
+git config core.hooksPath .githooks
+# keep `git blame` off the bulk reformatting commit
+git config blame.ignoreRevsFile .git-blame-ignore-revs
+```
+
 ## Support
 
 Please report bugs at https://github.com/karlb/castle-combat/issues.
