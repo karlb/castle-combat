@@ -1,7 +1,7 @@
 import pygame
 from pygame.locals import *
 import numpy as np
-from numpy import array, divide, indices
+from numpy import array, indices
 import os
 
 debug = False
@@ -101,20 +101,6 @@ def colorize(surface, color):
     # Colors may carry an alpha component, which pixels3d() does not cover.
     col = array(color, np.uint16)[:3]
     pixel_array[:] = pixel_array * col // 255
-    return surface
-
-
-# TODO
-def multiply_alpha(surface, factor):
-    """Returns a new surface, with all alpha values multiplied by factor"""
-    if surface.get_flags() & SRCALPHA:
-        surface = surface.convert_alpha()
-    else:
-        surface = surface.convert()
-
-    alpha = pygame.surfarray.pixels_alpha(surface)
-    divide(alpha, array(factor).astype(np.uint8), alpha)
-    # multiply(alpha, array(factor), alpha)
     return surface
 
 
