@@ -52,7 +52,7 @@ class Shot:
                 game.server_call("hit", (x, y), self.cannon.id)
 
 
-class Cannon(common.AutoReloader):
+class Cannon:
 
     cannon_pic = (
         [common.load_image("cannon%04d.png" % i, -1) for i in range(1, 31)],

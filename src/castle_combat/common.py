@@ -104,60 +104,6 @@ def colorize(surface, color):
     return surface
 
 
-###### Auto-Reloder ######
-import weakref, inspect
-
-
-class MetaInstanceTracker(type):
-    def __new__(cls, name, bases, ns):
-        t = super(MetaInstanceTracker, cls).__new__(cls, name, bases, ns)
-        t.__instance_refs__ = []
-        return t
-
-    def __instances__(self):
-        instances = [(r, r()) for r in self.__instance_refs__]
-        instances = [x_y for x_y in instances if x_y[1] is not None]
-        self.__instance_refs__ = [r for (r, o) in instances]
-        return [o for (r, o) in instances]
-
-    def __call__(self, *args, **kw):
-        instance = super(MetaInstanceTracker, self).__call__(*args, **kw)
-        self.__instance_refs__.append(weakref.ref(instance))
-        return instance
-
-
-class InstanceTracker(metaclass=MetaInstanceTracker):
-    pass
-
-
-class MetaAutoReloader(MetaInstanceTracker):
-    def __new__(cls, name, bases, ns):
-        new_class = super(MetaAutoReloader, cls).__new__(cls, name, bases, ns)
-        f = inspect.currentframe().f_back
-        for d in [f.f_locals, f.f_globals]:
-            if name in d:
-                old_class = d[name]
-                for instance in old_class.__instances__():
-                    instance.change_class(new_class)
-                    new_class.__instance_refs__.append(weakref.ref(instance))
-                # this section only works in 2.3
-                for subcls in old_class.__subclasses__():
-                    newbases = ()
-                    for base in subcls.__bases__:
-                        if base is old_class:
-                            newbases += (new_class,)
-                        else:
-                            newbases += (base,)
-                    subcls.__bases__ = newbases
-                break
-        return new_class
-
-
-class AutoReloader(metaclass=MetaAutoReloader):
-    def change_class(self, new_class):
-        self.__class__ = new_class
-
-
 ###### Misc ######
 
 
