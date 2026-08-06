@@ -61,4 +61,4 @@ Please report bugs at https://github.com/karlb/castle-combat/issues.
 
 ## Author
 
-Karl Bartel <karl42@gmail.com>
+Karl Bartel <karl@karl.berlin>
