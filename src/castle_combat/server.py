@@ -117,6 +117,14 @@ class Server:
         self.listening_port = reactor.listenTCP(pb.portno, pb.PBServerFactory(portal))
 
     def call(self, command, *args):
+        """Apply a command to the authoritative game, then replicate it
+
+        Swallowing ActionNotPossible is what keeps illegal moves off the wire,
+        which makes it a contract for every remote_ method: raise only if you
+        changed nothing, and if you changed anything, return normally. A method
+        that mutates and then rejects leaves the clients behind for good, since
+        nothing resends the state it altered on the way out.
+        """
         try:
             eval("self.game.remote_" + command)(*args)
         except common.ActionNotPossible:

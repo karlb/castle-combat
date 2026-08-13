@@ -83,12 +83,13 @@ class PlacePlayer(BasePlayer):
         pass
 
     def move(self, vector):
+        # both axes are checked before either is written, or a diagonal move
+        # with one legal component would half apply and still be rejected
+        newpos = [self.pos[i] + vector[i] for i in (0, 1)]
         for i in (0, 1):
-            newpos = self.pos[i] + vector[i]
-            if newpos != common.bound(newpos, 0, common.field_size[i] - 2):
+            if newpos[i] != common.bound(newpos[i], 0, common.field_size[i] - 2):
                 raise common.ActionNotPossible
-            else:
-                self.pos[i] = newpos
+        self.pos = newpos
 
 
 from .network import ServerObject, ClientObject, networkify

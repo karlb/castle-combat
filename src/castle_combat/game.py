@@ -178,7 +178,10 @@ class Game(pb.Referenceable, common.Borg):
                 ][0]
                 Grunt.instances.remove(defeated_grunt)
             game.field.blit_field(pos)
-        else:
+        elif cannon is None:
+            # A shot that lands on bare ground frees the cannon that fired it
+            # just the same, and the clients have to hear about that, so only a
+            # grunt's miss leaves the game unchanged.
             raise common.ActionIrrelevant
 
 
