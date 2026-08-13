@@ -8,6 +8,9 @@ from .field import Field
 
 class PlacePlayer(BasePlayer):
     cantbuild_pic = common.load_image("cantbuild.png", alpha=True)
+    # init() sets this per phase, but the cursor size depends on it, and a
+    # client's copy is rebuilt from get_state() without it
+    selected_type = 0
 
     def __init__(self, player):
         BasePlayer.__init__(self)
@@ -27,6 +30,8 @@ class PlacePlayer(BasePlayer):
         if not self.player.alive:
             self.new_cannons = 0
         self.selected_type = 0
+        # the centre of a player's territory can sit against an edge
+        self.pos = self.bounded(self.pos)
 
     def draw_cursor(self):
         if not self.new_cannons:
@@ -69,6 +74,10 @@ class PlacePlayer(BasePlayer):
 
         if self.new_cannons < Cannon.price[self.selected_type]:
             self.selected_type = 0
+        # a big cannon reaches one block further, so a cursor that was flush
+        # with an edge has to come back in, or draw_cursor() indexes past the
+        # field and the exception escapes the main loop
+        self.pos = self.bounded(self.pos)
 
     def handle_event(self, event):
         try:
@@ -82,13 +91,27 @@ class PlacePlayer(BasePlayer):
     def handle_movement(self, passed_milliseconds):
         pass
 
+    def size(self):
+        """How many blocks the cursor covers, as Cannon sizes its own"""
+        return 2 + self.selected_type
+
+    def bounded(self, pos):
+        """The nearest position that keeps the whole cannon on the field
+
+        int(), because bound() hands back whatever numpy type the field_size
+        it clamped against was made of.
+        """
+        return [
+            int(common.bound(pos[i], 0, common.field_size[i] - self.size()))
+            for i in (0, 1)
+        ]
+
     def move(self, vector):
         # both axes are checked before either is written, or a diagonal move
         # with one legal component would half apply and still be rejected
         newpos = [self.pos[i] + vector[i] for i in (0, 1)]
-        for i in (0, 1):
-            if newpos[i] != common.bound(newpos[i], 0, common.field_size[i] - 2):
-                raise common.ActionNotPossible
+        if newpos != self.bounded(newpos):
+            raise common.ActionNotPossible
         self.pos = newpos
 
 
