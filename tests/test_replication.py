@@ -7,11 +7,12 @@ good, because nothing resends the state it altered on the way out.
 """
 
 import pytest
+from twisted.spread import jelly
 
 from castle_combat import common
 from castle_combat.cannon import Cannon
-from castle_combat.field import Field
-from castle_combat.map import ConquerMap
+from castle_combat.field import Field, Grunt
+from castle_combat.map import ConquerMap, RiverMap2p
 
 
 def empty_block(game):
@@ -77,3 +78,77 @@ def test_a_rejected_diagonal_leaves_the_place_cursor_alone(make_game):
         place_player.local_move((1, -1))
 
     assert place_player.pos == [5, 0]
+
+
+def replicated_state(game):
+    """Everything a client mirrors from the host's broadcasts
+
+    Plain ints rather than repr(), because numpy changed how its scalars
+    repr() in 2.0 and pyproject.toml deliberately allows both majors.
+    """
+    return (
+        game.field.array.tobytes(),
+        tuple(player.secured.tobytes() for player in game.players),
+        tuple(
+            (cannon.id, tuple(int(c) for c in cannon.pos), cannon.in_use)
+            for cannon in sorted(game.cannons, key=lambda cannon: cannon.id)
+        ),
+        tuple(
+            (grunt.id, tuple(int(c) for c in grunt.pos), int(grunt.direction))
+            for grunt in sorted(Grunt.instances, key=lambda grunt: grunt.id)
+        ),
+        tuple(
+            tuple(int(c) for c in getattr(player.phase_player, "pos", ()))
+            for player in game.players
+            if getattr(player, "phase_player", None)
+        ),
+    )
+
+
+class Audit:
+    """Watches every command a running game replicates"""
+
+    def __init__(self):
+        self.mutated_but_silent = []
+        self.mangled_on_the_wire = []
+
+
+@pytest.fixture
+def audit(monkeypatch):
+    """Check both halves of the contract on every Server.call() of a game"""
+    from castle_combat.server import Server
+
+    report = Audit()
+    original = Server.call
+
+    def audited(self, command, *args):
+        before = replicated_state(self.game)
+        result = original(self, command, *args)
+        if result is None:
+            # rejected, so nothing went out: the game must be as it was
+            if replicated_state(self.game) != before:
+                report.mutated_but_silent.append(command)
+        elif jelly.unjelly(jelly.jelly(args)) != args:
+            # pb turns a numpy scalar into a plain zero rather than refusing it
+            report.mangled_on_the_wire.append((command, args))
+        return result
+
+    monkeypatch.setattr(Server, "call", audited)
+    return report
+
+
+@pytest.mark.parametrize("map_class", [ConquerMap, RiverMap2p])
+def test_a_whole_game_replicates_everything_it_changes(fake_time, audit, map_class):
+    """The generic version of the two regressions above
+
+    test_playthrough.py drives whole games but never connects a client, and
+    test_network.py connects a client but never plays a phase. Both faults
+    lived in that gap, so this walks a real game and checks each command
+    against the contract as it goes.
+    """
+    from test_playthrough import play
+
+    play(map_class, 1200, fake_time)
+
+    assert audit.mutated_but_silent == []
+    assert audit.mangled_on_the_wire == []

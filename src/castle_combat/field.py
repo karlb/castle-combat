@@ -72,7 +72,11 @@ class Grunt:
         self.time_to_action -= passed_milliseconds
         if self.time_to_action <= 0:
             # have a look at my movement possibilities
-            new_pos = tuple(add(self.pos, self.movement[self.direction]))
+            # plain ints, because this position is broadcast: pb has no
+            # serialisation for a numpy scalar and quietly sends a zero
+            new_pos = tuple(
+                int(c) for c in add(self.pos, self.movement[self.direction])
+            )
             if common.is_in_bounds(new_pos):
                 wall_in_front = game.field[new_pos] >= 0
             else:
