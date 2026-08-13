@@ -241,8 +241,8 @@ class LineEdit(Widget):
                 self.widget.value = self.widget.value[:-1]
             elif event.key in (pygame.K_RETURN, pygame.K_ESCAPE):
                 self.quit()
-            elif event.str:
-                self.widget.value += event.str
+            elif event.unicode.isprintable():
+                self.widget.value += event.unicode
             self.widget.update_text(self.show_cursor)
 
         events = {
