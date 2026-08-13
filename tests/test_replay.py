@@ -15,6 +15,7 @@ import random
 
 import pytest
 from twisted.internet import defer, reactor
+from twisted.spread import jelly
 
 from castle_combat import common
 from castle_combat.map import ConquerMap, RiverMap2p
@@ -41,6 +42,13 @@ class Recorder:
         self.wire = wire
 
     def callRemote(self, name, *args, **kwargs):
+        # a real client is reached through pb, so anything that would not
+        # survive the trip has to fail here rather than be replayed intact.
+        # This is the half of the wire test_replication.py cannot see: it
+        # watches Server.call, and these go out through the observers.
+        assert jelly.unjelly(jelly.jelly(args)) == args, (
+            "%s%r does not survive serialisation" % (name, args)
+        )
         self.wire.append((key_of(self.owner), name, args))
         return defer.succeed(None)
 
