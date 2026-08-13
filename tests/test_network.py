@@ -7,10 +7,11 @@ serialised. These tests open an actual perspective broker connection to the
 listening port, which is what puts the login, the cacheable state transfer and
 the observer bookkeeping under test.
 
-The real Client class cannot take part: Game is a Borg, so building a client
-side Game in this process would overwrite the server's. A recording stand-in
-plays the client instead, which is enough to see what the server sends, but it
-does leave client.py itself uncovered.
+The real Client class cannot take part in those: Game is a Borg, so building a
+client side Game alongside the server's would overwrite it. A recording stand-in
+plays the client there. The handshake in client.py is covered separately at the
+bottom of this file, by a test with no server in the process for it to clash
+with, since that handshake is where "no client could join at all" hid before.
 """
 
 import pytest
@@ -198,3 +199,62 @@ def test_transferring_a_player_signs_the_client_up_as_an_observer(connection):
     assert player.observers
     for phase in ("build", "place", "battle", "select"):
         assert getattr(player, phase + "_player").observers, phase
+
+
+class FakePerspective:
+    """The server end of the handshake, without a server
+
+    Every callRemote() the client makes during login answers at once, so the
+    deferred chain in connected_callback() runs straight through.
+    """
+
+    def __init__(self, info, claimable):
+        self.info = info
+        self.claimable = list(claimable)
+        self.calls = []
+
+    def callRemote(self, name, *args):
+        from twisted.internet import defer
+
+        self.calls.append(name)
+        if name == "get_server_info":
+            return defer.succeed(self.info)
+        if name == "claim_player_as_local":
+            return defer.succeed(self.claimable.pop(0))
+        return defer.succeed(None)
+
+
+def test_the_client_handshake_builds_a_game_and_reports_ready():
+    """client.py's half of joining, which no other test reaches
+
+    Both bugs that once made joining impossible were on this path and were
+    only found by connecting for real. The steps after the connection are
+    plain callbacks, so they can be driven without one.
+    """
+    from castle_combat import client
+    from castle_combat.player import PlayerCacheable
+
+    MainState()
+    menu.MenuState()
+    joiner = client.Client("localhost")
+    joiner.local_players = 1
+    joiner.wait_for_server_state = client.WaitForSeverState()
+
+    players = [PlayerCacheable(0), PlayerCacheable(1)]
+    map = ConquerMap(dict(difficulty="medium"))
+    map.setup()
+    info = {"players": players, "map": map, "server_game": None}
+    perspective = FakePerspective(info, [players[1]])
+
+    joiner.connected_callback(perspective)
+
+    assert perspective.calls == [
+        "get_server_info",
+        "claim_player_as_local",
+        "client_ready",
+    ]
+    assert joiner.game.players == players
+    assert joiner.game.field.map is map
+    # the slot the server handed out is the one this machine plays
+    assert players[1].local is True
+    assert players[0].local is False
