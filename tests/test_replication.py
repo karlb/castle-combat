@@ -33,9 +33,8 @@ def build_cannon(game, player):
                 for i in (0, 1):
                     for j in (0, 1):
                         player.secured[x + i][y + j] = 1
-                cannon = Cannon((x, y), player, 0)
-                game.cannons.append(cannon)
-                return cannon
+                # Cannon.__init__ puts itself in game.cannons
+                return Cannon((x, y), player, 0)
     raise AssertionError("the map left no room for a cannon")
 
 
