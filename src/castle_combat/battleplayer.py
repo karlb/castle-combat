@@ -70,18 +70,21 @@ class BattlePlayer(BasePlayer):
             self.pos[i] = common.bound(self.pos[i], 0, common.screen.get_size()[i] - 1)
 
     def shoot(self, pos):
-        # don't shoot after the turn ends
-        if game.phase.time_left <= 0:
-            raise common.ActionNotPossible
-        # look for a free cannon and shoot
         can = self.get_free_cannon()
-        if can:
-            can.in_use = True
-            Shot(can, pos)
-            game.cannons.remove(can)
-            game.cannons.append(can)
-        else:
+        # Only the host decides that a shot does not happen. A client asking
+        # the same question answers it against its own phase clock and its own
+        # cannon order, and one refusal leaves the round-robin below a step
+        # behind the host's for the rest of the game.
+        if game.server and (can is None or game.phase.time_left <= 0):
             raise common.ActionNotPossible
+        if can is None:
+            # the host fired something this machine has not got, so the lists
+            # are already apart; firing nothing beats picking the wrong cannon
+            return
+        can.in_use = True
+        Shot(can, pos)
+        game.cannons.remove(can)
+        game.cannons.append(can)
 
     def get_free_cannon(self):
         available_cannons = [
