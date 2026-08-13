@@ -36,22 +36,21 @@ class ClientAvatar(pb.Avatar):
         self.server = server
         self.mind = mind
         self.ready = False
+        self.players = []
         print("One client connected. Total: %d" % len(self.server.clients))
 
     ##### callbacks
 
     def logout_callback(self):
         self.server.clients.remove(self)
-
-        # quit game_state if it didn't quit already
-        game_state = self.server.game.game_state
-        if game_state in game_state.stack:
-            game_state.quit()
+        self.server.drop_players(self.players)
 
     ##### remote functions
 
     def perspective_claim_player_as_local(self):
-        return self.server.claim_player_as_local()
+        player = self.server.claim_player_as_local()
+        self.players.append(player)
+        return player
 
     def perspective_get_server_info(self):
         game = self.server.game
@@ -137,6 +136,19 @@ class Server:
         for ai in self.ai_players:
             ai.act_on_game_event(command)
         return dl
+
+    def drop_players(self, players):
+        """Take the players of a client that is gone out of the game
+
+        Before the game starts their slots simply open up again. Once it is
+        running they are eliminated, which the surviving players see as the
+        walls stopping rather than as their evening ending.
+        """
+        for player in players:
+            player.connected = False
+            print("%s left the game" % player.name)
+            if self.game.phase.phase_name != "none":
+                self.call("player_left", player.player_id)
 
     def claim_player_as_local(self):
         for player in self.game.players:

@@ -37,7 +37,11 @@ class ClientMind(pb.Referenceable):
 class ClientFactory(pb.PBClientFactory):
     def clientConnectionLost(self, connector, reason, reconnecting=0):
         print("Connection to server lost: %s" % reason)
-        self.client.game.game_state.quit()
+        # the connection can drop before there is a game to leave, e.g. while
+        # the handshake is still running
+        game = getattr(self.client, "game", None)
+        if game and getattr(game, "game_state", None):
+            game.game_state.quit()
 
 
 class Client:

@@ -90,7 +90,9 @@ class Player:
         self.secured = zeros(common.field_size)
         self.local = False
         self.ai = False
-        # self.center = common.field_size / 2
+        # where a cursor starts before this player has held any ground, since
+        # get_center_and_field_count() only recomputes it while there is some
+        self.center = [common.field_size[0] // 2, common.field_size[1] // 2]
 
         self.set_player_id(player_id)
 

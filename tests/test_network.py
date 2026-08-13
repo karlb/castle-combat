@@ -154,6 +154,36 @@ def test_the_server_forwards_its_commands_to_the_client(connection):
     assert "run" in mind.game.calls
 
 
+def test_a_client_leaving_eliminates_its_players_and_leaves_the_game_running(
+    connection,
+):
+    """Losing one connection used to end the game for everyone still playing
+
+    logout_callback() quit the server's game_state outright, so whoever was
+    left at their keyboard was thrown back to the menu because somebody else's
+    wifi blinked. The players that client held are eliminated instead, which is
+    a state the game already knows how to finish from.
+    """
+    from castle_combat.state import State
+
+    server, perspective, _mind = connection
+    spin(perspective.callRemote("claim_player_as_local"))
+    spin(perspective.callRemote("client_ready"))
+    settle()
+    game_state = server.game.game_state
+    avatar = server.clients[0]
+    assert server.game.players[1].alive
+
+    avatar.mind.broker.transport.loseConnection()
+    settle()
+
+    assert server.clients == []
+    assert server.game.players[1].alive is False
+    # the player at this machine keeps playing, and the game is still on
+    assert server.game.players[0].alive
+    assert game_state in State.stack
+
+
 def test_transferring_a_player_signs_the_client_up_as_an_observer(connection):
     server, perspective, _mind = connection
 

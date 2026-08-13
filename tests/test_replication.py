@@ -88,6 +88,7 @@ def replicated_state(game):
     return (
         game.field.array.tobytes(),
         tuple(player.secured.tobytes() for player in game.players),
+        tuple(player.alive for player in game.players),
         tuple(
             (cannon.id, tuple(int(c) for c in cannon.pos), cannon.in_use)
             for cannon in sorted(game.cannons, key=lambda cannon: cannon.id)

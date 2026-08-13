@@ -110,6 +110,13 @@ class Game(pb.Referenceable, common.Borg):
         self.game_state = GameState()
         self.phase = AnnouncePhase(SelectPhase)
 
+    def remote_player_left(self, player_id):
+        player = self.players[player_id]
+        if not player.alive:
+            # already out, so there is nothing to change and nothing to send
+            raise common.ActionIrrelevant
+        player.die()
+
     def remote_next_phase(self):
         self.phase.cleanup()
         self.phase.quit()
