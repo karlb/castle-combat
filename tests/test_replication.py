@@ -10,6 +10,7 @@ import pytest
 from twisted.spread import jelly
 
 from castle_combat import common
+from castle_combat.battleplayer import BattlePlayer
 from castle_combat.cannon import Cannon
 from castle_combat.field import Field, Grunt
 from castle_combat.map import ConquerMap, RiverMap2p
@@ -89,18 +90,29 @@ def replicated_state(game):
         game.field.array.tobytes(),
         tuple(player.secured.tobytes() for player in game.players),
         tuple(player.alive for player in game.players),
+        # not sorted: the order is the round-robin get_free_cannon() reads, so
+        # two machines picking cannons in different orders is itself a fault
         tuple(
-            (cannon.id, tuple(int(c) for c in cannon.pos), cannon.in_use)
-            for cannon in sorted(game.cannons, key=lambda cannon: cannon.id)
+            (
+                cannon.id,
+                tuple(int(c) for c in cannon.pos),
+                cannon.in_use,
+                cannon.hitpoints,
+            )
+            for cannon in game.cannons
         ),
         tuple(
             (grunt.id, tuple(int(c) for c in grunt.pos), int(grunt.direction))
             for grunt in sorted(Grunt.instances, key=lambda grunt: grunt.id)
         ),
+        # the battle crosshair is left out on purpose: handle_movement() dead
+        # reckons it from set_movement using each machine's own frame times, so
+        # it drifts apart by design and is not something to hold anyone to
         tuple(
             tuple(int(c) for c in getattr(player.phase_player, "pos", ()))
             for player in game.players
             if getattr(player, "phase_player", None)
+            and not isinstance(player.phase_player, BattlePlayer)
         ),
     )
 

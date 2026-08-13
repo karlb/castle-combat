@@ -42,6 +42,9 @@ class Recorder:
         self.wire = wire
 
     def callRemote(self, name, *args, **kwargs):
+        # delegate_and_call() forwards keywords, so dropping them here would
+        # quietly replay something other than what a client would receive
+        assert not kwargs, "%s was sent keywords this does not replay" % name
         # a real client is reached through pb, so anything that would not
         # survive the trip has to fail here rather than be replayed intact.
         # This is the half of the wire test_replication.py cannot see: it

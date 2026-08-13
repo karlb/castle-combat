@@ -127,3 +127,30 @@ def test_a_client_never_moves_on_by_itself(announcement):
 
     # however long it has been, a client waits for the host to say so
     assert announce in State.stack
+
+
+def test_a_client_does_not_confirm_the_castles_the_host_confirms(build_phase):
+    """SelectPhase.cleanup() used to crash on every client that had a straggler
+
+    networkify() installs the remote_ names on the server classes only, so a
+    client's copy has no remote_confirm_select at all. The host broadcasts its
+    confirmations before next_phase, which normally leaves the clients with
+    nobody left to confirm -- but SelectPlayer.init() resets finished to False
+    when the phase starts there, so a confirmation that arrives before the
+    client has built its SelectPhase is wiped and never sent again. That client
+    then reaches this and dies.
+    """
+    from castle_combat.gamephases import SelectPhase
+    from castle_combat.selectplayer import SelectPlayerClient
+
+    game, phase = build_phase
+    phase.quit()
+    game.server = None
+    select_phase = SelectPhase()
+    for player in game.players:
+        player.select_player = SelectPlayerClient()
+        player.select_player.finished = False
+
+    select_phase.cleanup()  # the host will say who confirmed
+
+    assert not any(player.select_player.finished for player in game.players)

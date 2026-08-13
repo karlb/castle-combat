@@ -281,6 +281,13 @@ class SelectPhase(Phase):
         ]
 
     def cleanup(self):
+        # The host confirms whoever ran out of time and the clients hear about
+        # it like any other move. A client doing its own confirming would be
+        # deciding for the others, and remote_confirm_select() does not even
+        # exist on its copies: networkify() puts the remote_ names on the
+        # server classes only.
+        if not game.server:
+            return
         for player in game.players:
             if not player.select_player.finished:
                 player.select_player.remote_confirm_select()
