@@ -38,7 +38,10 @@ class Phase(State):
         self.clock.tick()
 
     def handle(self):
-        if self.phase_end():
+        # only the host ends a phase. A client that asked the question would
+        # answer it against its own clock, and answering yes costs it the
+        # whole else branch: no cursors, no redraw, until next_phase arrives
+        if game.server and self.phase_end():
             game.server_call("next_phase")
         else:
             passed_milliseconds = min(self.clock.tick(), 500)
