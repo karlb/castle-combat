@@ -239,9 +239,11 @@ class LineEdit(Widget):
         def handleKeypress(self, event):
             if event.key == pygame.K_BACKSPACE:
                 self.widget.value = self.widget.value[:-1]
-            elif event.key in (pygame.K_RETURN, pygame.K_ESCAPE):
+            elif event.key in (pygame.K_RETURN, pygame.K_KP_ENTER, pygame.K_ESCAPE):
                 self.quit()
-            elif event.unicode.isprintable():
+            elif event.unicode and event.unicode.isprintable():
+                # modifiers and arrow keys report an empty string, and
+                # "".isprintable() is True, so emptiness is checked first
                 self.widget.value += event.unicode
             self.widget.update_text(self.show_cursor)
 

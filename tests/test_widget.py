@@ -53,10 +53,16 @@ def test_unprintable_keys_are_ignored(server_field):
     assert server_field.value == "host"
 
 
-def test_return_leaves_the_edit_state(server_field):
+@pytest.mark.parametrize("key", [pygame.K_RETURN, pygame.K_KP_ENTER, pygame.K_ESCAPE])
+def test_the_confirming_keys_leave_the_edit_state(server_field, key):
+    """Both Enters, so the keypad one is not left typing nothing
+
+    "\\r".isprintable() is False, so once the printable branch took over from
+    the old event.str, keypad Enter fell through every branch silently.
+    """
     editing = State.stack[-1]
 
-    State.on_event(keydown("\r", pygame.K_RETURN))
+    State.on_event(keydown("\r", key))
 
     assert State.stack[-1] is not editing
     assert server_field.value == "host"
