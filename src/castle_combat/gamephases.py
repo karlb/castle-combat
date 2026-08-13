@@ -74,6 +74,8 @@ class AnnouncePhase(State):
 
     box_pic = common.load_image("box.png", alpha=True)
     phase_name = "announce"
+    # long enough that nobody sees it in a game somebody is watching
+    give_up_waiting = 15000
 
     def __init__(self, next_phase):
         State.__init__(self)
@@ -93,6 +95,18 @@ class AnnouncePhase(State):
         if pygame.time.get_ticks() > self.start_time + 500:
             game.server_call("next_phase")
             raise IgnoreEvent
+
+    def handle(self):
+        """Move on by itself if the host never presses anything
+
+        Only the host can leave this screen, and only a key press takes it
+        there, so an unfocused window on that one machine keeps everybody
+        else on the announcement for as long as it stays unfocused.
+        """
+        if game.server and pygame.time.get_ticks() > self.start_time + (
+            self.give_up_waiting
+        ):
+            game.server_call("next_phase")
 
     events = {pygame.KEYDOWN: proceed_if_waited_long_enough}
 

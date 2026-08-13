@@ -83,3 +83,47 @@ def test_the_host_keeps_drawing_while_the_timer_runs(build_phase):
 
     assert game.server.commands == []
     assert drawn
+
+
+@pytest.fixture
+def announcement(build_phase):
+    """The 'build phase begins' screen, waiting to be acknowledged"""
+    from castle_combat.gamephases import AnnouncePhase, BuildPhase
+
+    game, phase = build_phase
+    phase.quit()
+    announce = AnnouncePhase(BuildPhase)
+    game.phase = announce
+    return game, announce
+
+
+def test_the_host_moves_on_from_an_announcement_nobody_acknowledges(announcement):
+    game, announce = announcement
+    game.server = RecordingServer()
+    announce.start_time -= announce.give_up_waiting + 1
+
+    announce.handle()
+
+    assert game.server.commands == ["next_phase"]
+
+
+def test_the_host_waits_a_while_first(announcement):
+    game, announce = announcement
+    game.server = RecordingServer()
+
+    announce.handle()
+
+    assert game.server.commands == []
+
+
+def test_a_client_never_moves_on_by_itself(announcement):
+    from castle_combat.state import State
+
+    game, announce = announcement
+    game.server = None
+    announce.start_time -= announce.give_up_waiting * 10
+
+    announce.handle()
+
+    # however long it has been, a client waits for the host to say so
+    assert announce in State.stack
