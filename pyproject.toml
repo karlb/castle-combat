@@ -1,6 +1,6 @@
 [project]
 name = "castle-combat"
-version = "0.9.0"
+version = "0.9.1"
 description = "Multiplayer action/strategy game"
 readme = "README.md"
 requires-python = ">=3.10"
